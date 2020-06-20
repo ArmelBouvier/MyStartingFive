@@ -345,15 +345,16 @@
                                     } else {
                                         $position = 'Pivot';
                                     }
+
                     @endphp
                     <div class="row mx-0 my-1">
                         <div class="col-12 MS5card">
                             <div class="row">
                                 <div class="col-md-4">
-                                    @if($playerData->photo_url === 'image')
+                                    @if($auction->getPlayerData->photo_url === 'image')
                                         <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
                                     @else
-                                        <img src="{{$playerData->photo_url}}"
+                                        <img src="{{$auction->getPlayerData->photo_url}}"
                                              class="w-25 rounded-circle pr-1">
                                     @endif
                                 </div>
