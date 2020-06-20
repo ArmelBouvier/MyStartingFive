@@ -301,14 +301,4 @@ class DashboardController extends Controller
                 ;
         }
     }
-
-    public function profile($id)
-    {
-        $user = User::where('id', '=', $id)->first();
-        return view('dashboard.profile', compact('user'));
-    }
-
-
-
-
 }
