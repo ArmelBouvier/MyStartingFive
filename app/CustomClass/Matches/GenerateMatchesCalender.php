@@ -23,7 +23,7 @@ class GenerateMatchesCalender extends Command
     public function handle()
     {
         $drafts = Draft::all();
-
+        date_default_timezone_set ( 	'Europe/Paris' );
         foreach ($drafts as $draft) {
 
             //date limite à partir de laquelle la draft prend fin et le calendrier des matches est généré
@@ -75,12 +75,11 @@ class GenerateMatchesCalender extends Command
                     if ($i === 0) {
                         $matchTime = now()->addMinutes(5);
                     } else {
-                        $matchTime = now()->addMinutes($i);
+                        $matchTime = now()->addMinutes(5 + $i);
                     }
 
 
                     foreach ($scheduleGame as $game) {
-                        date_default_timezone_set ( 	'Europe/Paris' );
                         $matchDatas = [
                             [
                                 'home_team_id' => $game[0],
