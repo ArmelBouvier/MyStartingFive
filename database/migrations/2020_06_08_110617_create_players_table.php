@@ -18,6 +18,7 @@ class CreatePlayersTable extends Migration
             $table->integer('player_external_id');
             $table->integer('price');
             $table->json('data');
+            $table->string('photo_url', 255)->default('0');
             $table->json('latest_stats');
             $table->integer('score');
             $table->timestamps();
