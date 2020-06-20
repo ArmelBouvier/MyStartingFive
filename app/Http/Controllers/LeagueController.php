@@ -269,6 +269,12 @@ class LeagueController extends Controller
             foreach ($teamsToDestroy as $team){
                 $team->delete();
             }
+
+             DB::table('role_user')
+                ->where('user_id', $league->user_id)
+                ->where('role_id', 3)
+                ->delete();
+
             // suppression de la league
             $league->delete();
 
