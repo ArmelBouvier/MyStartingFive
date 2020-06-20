@@ -17,6 +17,7 @@ class SaveDraftPick extends Command
 
     public function handle()
     {
+        date_default_timezone_set ( 	'Europe/Paris' );
         $auctions = Auction::orderBy('auction', 'desc')->get();
         $now = new \DateTime();
 

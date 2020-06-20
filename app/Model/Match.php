@@ -8,6 +8,7 @@ class Match extends Model
 {
 
     protected $table = 'matchs';
+    protected $dates = ['started_at'];
 
     // Récupére le nom des équipes présent dans le match grâce à la clé étranger home_team_id dans la table match
     public function homeTeamName() {

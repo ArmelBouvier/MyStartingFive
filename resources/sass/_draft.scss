@@ -16,6 +16,9 @@ h1, h2, h3 {
     .dropdown-toggle:hover, #btn-allPlayers:hover  {
         color: $quaternary !important;
     }
+    #playersToDraft {
+        max-height: 50px !important;
+    }
 
     .cardcountdown {
         display: block;

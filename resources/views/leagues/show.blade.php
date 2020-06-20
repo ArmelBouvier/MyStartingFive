@@ -113,5 +113,16 @@
         </div>
     </div>
 @endsection
+@section('script-footer')
+    <script>
 
+        $.ajax({
+            url: '',
+            success: function(data) {
+                $('body').html(data);
+            }
+        });
+
+    </script>
+@endsection
 

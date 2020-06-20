@@ -35,7 +35,6 @@
                     <tbody class="table-hover">
                     @foreach($userPlayersTeam as $player)
                         @php
-
                             $playerStats = json_decode($player->data)->pl;
                                 if(isset($playerStats->ca->sa)) {
                                    $currentSeasonStats = $playerStats->ca->sa;
@@ -56,9 +55,12 @@
                         <tr>
                             <th scope="row" class="align-middle pr-0">
 
-                                <img
-                                    src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
-                                    class="w-25 rounded-circle pr-1">
+                                @if($player->photo_url === 'image')
+                                    <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                @else
+                                    <img src="{{$player->photo_url}}"
+                                         class="w-25 rounded-circle pr-1">
+                                @endif
 
 
                                 {{$playerStats->fn}} {{$playerStats->ln}}
@@ -102,8 +104,12 @@
                             @php
                                 $playerDatas = json_decode($playerSelected->data)->pl;
 
-                                    $currentSeasonStats = $playerDatas->ca->sa;
-                                    $currentSeasonStats = last($currentSeasonStats);
+                                   if(isset($playerStats->ca->sa)) {
+                                   $currentSeasonStats = $playerStats->ca->sa;
+                                   $currentSeasonStats = last($currentSeasonStats);
+                                } else {
+                                    $currentSeasonStats = $playerStats->ca;
+                                }
 
                                 $position  = substr($playerDatas->pos, 0,1);
                                 if($position === "G") {
@@ -122,9 +128,12 @@
                                     </a>
                                 <td>
                                 <td width="50%">
-                                    <img
-                                        src="https://nba-players.herokuapp.com/players/{{$playerDatas->ln}}/{{$playerDatas->fn}}"
-                                        class="w-100 rounded-circle pr-1">
+                                    @if($playerSelected->photo_url === 'image')
+                                        <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                    @else
+                                        <img src="{{$playerSelected->photo_url}}"
+                                             class="w-25 rounded-circle pr-1">
+                                    @endif
 
                                 </td>
                                 <td>{{$position}}</td>
@@ -144,33 +153,6 @@
         @section('script-footer')
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
             <script>
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                // setInterval('someFunc()', 5000);
-                //
-                // function someFunc()
-                // {
-                //
-                //     $.ajax({
-                //         async: true,
-                //         type: "get",
-                //         url: "",
-                //         //data: data,
-                //         success: function (html) {
-                //             $('body').html(html);
-                //         }
-                //     });
-                // }
-                // setInterval('someFunc()', 5000);
-                // function someFunc()
-                //  {
-                //      $('body').load(document.URL);
-                //      console.log('test');
-                //  }
-
                 // On attend le chargement du document
                 document.addEventListener("DOMContentLoaded", function () {
                     (function () {
@@ -274,7 +256,7 @@
                         var matchDate = document.querySelector('#MatchDateTime').textContent;
                         var deadline = new Date(matchDate);
                         var c = new Clock(deadline, function () {
-                            alert('countdown complete')
+                            //alert('countdown complete')
                         });
                         document.getElementById('countdown').appendChild(c.el);
                         var clock = new Clock();
@@ -447,10 +429,17 @@
                                 } else {
                                     position = 'Pivot';
                                 }
+                                console.log(data.photo_url);
+                                let photo = '';
+                                if(data.photo_url === 'image'){
+                                    photo = "<i class='fas fa-user fa-2x ml-3 mr-4 main-color'>" + "</i>";
+                                } else {
+                                    photo = "<img src=" + data.photo_url + " >";
+                                }
 
                                 table.insertAdjacentHTML('beforeend',
                                     '<tr class="MS5card w-100">' + '<td>' + '</td>' +
-                                    '<td width="50%">' + '<img src="https://nba-players.herokuapp.com/players/' + data.lastname + "/" + data.name + '"' + ' class="w-100 rounded-circle pr-1">' + '</td>' +
+                                    '<td width="50%">' + photo + '</td>' +
                                     '<td>' +
                                     '<td>' + position + '</td>' +
                                     '<td class="ml-3">' + data.name + '</td>' +

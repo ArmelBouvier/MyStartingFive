@@ -215,6 +215,7 @@ class LeagueController extends Controller
                 $data->isActive = $request->isActive;
                 $data->save();
 
+                date_default_timezone_set ( 	'Europe/Paris' );
                 //enregistrement du début de la draft avec heure de fin
                 $draftEnd = now()->addMinutes(2);
                 $draft = new Draft();

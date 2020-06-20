@@ -148,6 +148,10 @@ h3 {
   color: #eb671b !important;
 }
 
+#draft-container #playersToDraft {
+  max-height: 50px !important;
+}
+
 #draft-container .cardcountdown {
   display: block;
   position: relative;
@@ -596,6 +600,10 @@ label {
 
 .quaternary {
   color: #eb671b;
+}
+
+.main-color {
+  color: #2b2236;
 }
 
 .MS5card {

@@ -18,11 +18,11 @@ class PlayWeeklyMatches extends Command
         foreach ($matches as $match) {
             $limitTime = $match->start_at;
             // Calcule du score de la team de l'utilisateur
-            $scoreHomeTeam = 0;
-            $scoreAwayTeam = 0;
 
             if($limitTime <= now()) {
                 $allPlayers = $match->matchPlayers;
+                $scoreHomeTeam = 0;
+                $scoreAwayTeam = 0;
 
                 foreach ($allPlayers as $player) {
                     // récupérer la home team pour vérifier que leur joueur lui apparatiennne et lui rajouter les points sinon
