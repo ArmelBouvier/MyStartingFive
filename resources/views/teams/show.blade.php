@@ -17,47 +17,55 @@
                 {{ session()->get('success') }}
             </div><br/>
         @endif
-        <h1 class="my-5 text-white">{{ $team->name }}</h1>
+        <div class="row mb-3">
+            <div class="col-md-6"><img class="w-25" src="{{$logo}}"></div>
+            <div class="col-md-6"><h1 class="my-5 text-white">{{ $team->name }}</h1></div>
+        </div>
+
         <div class="row justify-content-between">
 
 {{--            Infos sur les joueurs--}}
             <div class="MS5card card mb-5" style="width: 18rem;">
                 <div id="card_private_league" class="py-4 d-flex flex-column align-items-center">
                     <h2 class="text-white display-3" ><i class="fas fa-users"></i></h2>
-                    <h2 class="text-white">dernier 5</h2>
+                    <h2 class="text-white">5 majeur</h2>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-between">
-                    @foreach($allPlayersMatch as $player)
-                        @php
-                            $playerStats = json_decode($player->data)->pl;
+                    @if(isset($userBestPlayersTeam))
+                        @foreach($userBestPlayersTeam as $player)
+                            @php
+                                $playerStats = json_decode($player->data)->pl;
 
-                            $position  = substr($playerStats->pos, 0,1);
-                                        if($position === "G") {
-                                            $position = 'Arrière';
-                                        } else if ($position === "F") {
-                                            $position = 'Ailier';
-                                        } else {
-                                            $position = 'Pivot';
-                                        }
-
-                        @endphp
-                        <p class="card-text"><span class="tertiary">
+                                $position  = substr($playerStats->pos, 0,1);
+                                            if($position === "G") {
+                                                $position = 'Arrière';
+                                            } else if ($position === "F") {
+                                                $position = 'Ailier';
+                                            } else {
+                                                $position = 'Pivot';
+                                            }
+                            @endphp
+                            <p class="card-text"><span class="tertiary">
                                 {{$playerStats->fn}} {{$playerStats->ln}}
                                 : </span>{{$position}}</p>
-                    @endforeach
+                        @endforeach
+                    @else
+                        <p>Pas de match joué !</p>
+                    @endif
+
                     </div>
                 </div>
 
     {{--            Stats de l'équipe--}}
                 <div class="MS5card card mb-5" style="width: 18rem;">
                     <div id="card_public_league" class="py-4 d-flex flex-column align-items-center">
-                        <h2 class="text-white display-3" ><i class="fas fa-chart-bar"></i></h2>
-                        <h2 class="text-white">Stats</h2>
+                        <h2 class="text-white display-3" ><i class="fas fa-info"></i></h2>
+                        <h2 class="text-white">Infos de ta team</h2>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between">
-                        <p class="card-text"><span class="tertiary">Ratio V/D : </span>3</p>
-                        <p class="card-text"><span class="tertiary">Pts. marqués /match : </span>123</p>
-                        <p class="card-text"><span class="tertiary">Pts. encaissés /match : </span>87</p>
+                        <p class="card-text"><span class="tertiary">Coach : </span>{{$team->userTeam->pseudo}}</p>
+                        <p class="card-text"><span class="tertiary">Stade : </span>{{$team->stadium_name}}</p>
+                        <p class="card-text"><span class="tertiary">Valeur de l'équipe : </span>{{$teamValue}} M$</p>
                     </div>
                 </div>
 
@@ -68,9 +76,12 @@
                         <h2 class="text-white">Classement</h2>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between">
-                        <p class="card-text"><span class="tertiary">Classement : </span>1/4</p>
-                        <p class="card-text"><span class="tertiary">% Victoires : </span>58%</p>
-                        <p class="card-text"><span class="tertiary">Série / 3 matchs </span>V/D/V</p>
+                        <p class="card-text"><span class="tertiary">League : </span>{{$team->getLeague->name}}</p>
+                        @if($teamVictoryRatio !== 0)
+                            <p class="card-text"><span class="tertiary">% Victoires : </span>{{$teamVictoryRatio}}%</p>
+                        @else
+                            <p class="card-text">Ton équipe n'a pas encore joué de match</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -78,7 +89,6 @@
     {{--            Affichage du roster--}}
             <div class="row">
                 <h2 class="text-white">Roster :</h2>
-                <p class="tertiary">filtres</p>
                 <table class="table table-striped text-white">
                     <thead class="font-weight-bold">
                     <tr>

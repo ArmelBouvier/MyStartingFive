@@ -142,6 +142,13 @@ class LeagueController extends Controller
             $teamsID[]= $leagueTeam->id;
         }
 
+        // Calcul de la valeur de chaque équipe de la league
+        $userPlayers = $userTeam->getPlayers;
+        $teamValue = 0;
+        foreach($userPlayers as $player){
+            $teamValue += $player->price;
+        }
+
         // Calcul du pourcentage de victoire de chaque équipe de la league
         $teamVictoryRatio = [];
         foreach ($teamsID as $team){
@@ -150,13 +157,12 @@ class LeagueController extends Controller
             $teamAwayCount = Match::where('away_team_id', $team)->count();
             $teamCountSum = $teamHomeCount + $teamAwayCount;
             if ($teamCountSum !== 0) {
-                $teamVictoryRatio[$team] = number_format((($teamWiningCount2 /  $teamCountSum) * 100), 2, '.', '');
+                $teamVictoryRatio[$team] =  (float) number_format((($teamWiningCount2 /  $teamCountSum) * 100), 2, '.', '');
             } else {
-                $teamVictoryRatio[$team] = 'l\'équipe n\'a pas joué de match';
+                $teamVictoryRatio[$team] = 0;
             }
-
-
         }
+
         // Check du statut de la draft
         if($league->isActive === 1){
             $draftStatus = $league->draft->is_over;
@@ -198,7 +204,7 @@ class LeagueController extends Controller
         $data = League::find($id);
         if($data->teams->count() === $data->users->count()){
             if ($data->users->count()% 2 == 0){
-
+                date_default_timezone_set ( 	'Europe/Paris' );
                 $data->isActive = $request->isActive;
                 $data->save();
 
@@ -207,7 +213,7 @@ class LeagueController extends Controller
                 $draft = new Draft();
                 $draft->league_id = $data->id;
                 $draft->is_over = 0;
-                $draft->ends_at = $draftEnd->format('Y-m-d 20:00:00');
+                $draft->ends_at = $draftEnd;
                 $draft->save();
 
                 //Récupération des emails des membres de la league
@@ -231,7 +237,7 @@ class LeagueController extends Controller
 
                 return redirect(route('draft.index'))->with('success', 'La draft commence !');
             } else{
-                return redirect(route('leagues.show', $id))->withErrors('Le nombre joueurs n\' est pas pair !');
+                return redirect(route('leagues.show', $id))->withErrors('Le nombre de joueurs n\' est pas pair !');
             }
         } else{
             return redirect(route('leagues.show', $id))->withErrors('Tous les joueurs n\'ont pas créé leur équipe !');
@@ -247,10 +253,24 @@ class LeagueController extends Controller
      */
     public function destroy($id)
     {
-        $league = League::findOrFail($id);
-        $league->delete();
 
-        return redirect(route('leagues.index'))->with('success', 'La league a bien été supprimée.');
+        $league = League::findOrFail($id);
+        $teamsToDestroy = $league->teams;
+        if (isset($teamsToDestroy)){
+            // d'abord détruire les équipes avant de supprimer la league
+            foreach ($teamsToDestroy as $team){
+                $team->delete();
+            }
+            // suppression de la league
+            $league->delete();
+
+            return redirect(route('leagues.index'))->with('success', 'La league a bien été supprimée.');
+        }else{
+            // suppression de la league
+            $league->delete();
+
+            return redirect(route('leagues.index'))->with('success', 'La league a bien été supprimée.');
+        }
     }
 
     public function publicLeagues()

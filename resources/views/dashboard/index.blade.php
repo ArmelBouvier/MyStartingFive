@@ -76,8 +76,7 @@
                         </div>
                     </div>
                     <div class="row no-gutters justify-content-center mt-4">
-                        <a href="{{route('match.index')}}" class="text-white bouton-inscription">Préparation de
-                            l'équipe</a>
+                        <a href="{{route('match.index')}}" class="text-white bouton-inscription">Coaching</a>
                     </div>
                 </div>
 
@@ -101,60 +100,72 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>TheBoss</td>
-                                            <td>New Orleans Arena</td>
-                                            <td>0.889</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Puma</td>
-                                            <td>United Center</td>
-                                            <td>0.760</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Elchikitopouet</td>
-                                            <td>Madisson Square Garden</td>
-                                            <td>0.512</td>
-                                        </tr>
+                                        @foreach( $userLeague->users as $user)
+                                            <tr>
+                                                <td class="align-middle">  {{$user->team->name}}</td>
+                                                <td class="align-middle">  {{$user->team->stadium_name}}</td>
+                                                @if($user->team !== null)
+                                                    <td class="align-middle">{{$teamVictoryRatio[$user->team->id]}}</td>
+                                                @else
+                                                @endif
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="row no-gutters MS5card text-center mt-4">
                                 <div class="col-12">
-                                    <h2 class="text-white">Équipe</h2>
+                                    <h2 class="text-white">Team</h2>
                                 </div>
                                 <div class="col-12">
                                     <table class="table table-bordered bg-card w-100 m-0">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Position</th>
                                             <th scope="col">Joueur</th>
+                                            <th scope="col">Position</th>
+                                            <th scope="col">Score</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>MJ</td>
-                                            <td>Chris Paul</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A</td>
-                                            <td>James Harden</td>
-                                        </tr>
-                                        <tr>
-                                            <td>AI</td>
-                                            <td>Lebron James</td>
-                                        </tr>
-                                        <tr>
-                                            <td>AF</td>
-                                            <td class="">Giannis Antetokounmpo</td>
-                                        </tr>
-                                        <tr>
-                                            <td>P</td>
-                                            <td>Demarcus Cousins</td>
-                                        </tr>
+                                        @foreach($userBestPlayersTeam as $player)
+                                            @php
+                                                $playerStats = json_decode($player->data)->pl;
+                                                    if(isset($playerStats->ca->sa)) {
+                                                       $currentSeasonStats = $playerStats->ca->sa;
+                                                       $currentSeasonStats = last($currentSeasonStats);
+                                                    } else {
+                                                        $currentSeasonStats = $playerStats->ca;
+                                                    }
+                                                $position  = substr($playerStats->pos, 0,1);
+                                                if($position === "G") {
+                                                    $position = 'Arrière';
+                                                } else if ($position === "F") {
+                                                    $position = 'Ailier';
+                                                } else {
+                                                    $position = 'Pivot';
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <th scope="row" class="align-middle pr-0">
+
+                                                    <img
+                                                        src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
+                                                        class="w-25 rounded-circle pr-1">
+
+                                                    {{$playerStats->fn}} {{$playerStats->ln}}
+                                                </th>
+                                                <td class="align-middle">{{$position}}</td>
+                                                <td class="align-middle">{{$player->score}}</td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="row no-gutters justify-content-center mt-4">
+                                        <a href="{{route('teams.show', $userTeamId)}}" class="text-white bouton-inscription">
+                                            Roster
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -218,41 +229,6 @@
 
                             </div>
                         </div>
-
-                        {{-- Card Equipe --}}
-                        <div class="col-12">
-                            <table class="table table-bordered bg-card my-2">
-                                <thead>
-                                <tr class="text-center w-100">
-                                    <th class="w-50">Domicile</th>
-                                    <th class="w-50">Extérieur</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="text-center w-100">
-                                    <td class="w-50">Chris Paul</td>
-                                    <td class="w-50">Kyrie Irving</td>
-                                </tr>
-                                <tr class="text-center w-100">
-                                    <td class="w-50">James Harden</td>
-                                    <td class="w-50">Jimmy Butler</td>
-                                </tr>
-                                <tr class="text-center w-100">
-                                    <td class="w-50">Lebron James</td>
-                                    <td class="w-50">Kawhi Leonard</td>
-                                </tr>
-                                <tr class="text-center w-100">
-                                    <td class="w-50">Giannis Antetokounmpo</td>
-                                    <td class="w-50">Lamarcus Aldridge</td>
-                                </tr>
-                                <tr class="text-center w-100">
-                                    <td class="w-50">Demarcus Cousins</td>
-                                    <td class="w-50">DeAndre Jordan</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
                     </div>
                 </div>
                 {{-- Card Tweets si il y des matchs --}}
@@ -377,7 +353,6 @@
                         }
                         this.update(value);
                     }
-
                     // Calculation adapted from https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/
                     function getTimeRemaining(endtime) {
                         var t = Date.parse(endtime) - Date.parse(new Date());
@@ -389,7 +364,6 @@
                             'Secondes': Math.floor((t / 1000) % 60)
                         };
                     }
-
                     function Clock(countdown, callback) {
                         countdown = countdown ? new Date(Date.parse(countdown)) : false;
                         callback = callback || function () {
@@ -408,7 +382,6 @@
                             this.el.appendChild(trackers[key].el);
                         }
                         var i = 0;
-
                         function updateClock() {
                             timeinterval = requestAnimationFrame(updateClock);
                             // throttle so it's not constantly updating the time.
@@ -428,10 +401,8 @@
                                 trackers[key].update(t[key]);
                             }
                         }
-
                         setTimeout(updateClock, 500);
                     }
-
                     var matchDate = document.querySelector('#MatchDateTime').textContent;
                     var deadline = new Date(matchDate);
                     var c = new Clock(deadline, function () {

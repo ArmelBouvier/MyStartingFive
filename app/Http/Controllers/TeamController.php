@@ -142,30 +142,49 @@ class TeamController extends Controller
         // récupération des données user
         $user = Auth::user();
 
-        // league à laquelle appartient l'utilisateur
-        $userLeagueId = $user->team->league_id;
-
         // $userTeam récupère l'équipe de l'utilisateur
         $userTeam = Team::where('user_id', $user->id)->first();
 
-        // $userLastMatch récupère le dernier match jouer par l'utilisateur dans match
-        $userLastMatch = Match::where(function ($query) use ($userLeagueId, $userTeam) {
-            $query->where(['league_id' => $userLeagueId, 'away_team_id' => $userTeam->id])
-                ->orwhere(['league_id' => $userLeagueId, 'home_team_id' => $userTeam->id]);
-        })
-            ->whereNotNull('home_team_score')
-            ->whereNotNull('away_team_id')
-            ->orderBy('start_at', 'desc')
-            ->first();
+        // Calcul de la cote cumulée de l'équipe
+        $userPlayers = $userTeam->getPlayers;
+        $teamValue = 0;
+        foreach($userPlayers as $player){
+            $teamValue += $player->price;
+        }
+        // Calcul du pourcentage de victoire de l'équipe
+        $teamWiningCount = Match::where('team_wining', '=', $team->id)->count();
+        $teamHomeCount = Match::where('home_team_id', $team->id)->count();
+        $teamAwayCount = Match::where('away_team_id', $team->id)->count();
+        $teamCountSum = $teamHomeCount + $teamAwayCount;
 
-        // Récupère tous les joeurs du dernier du matchs
-        $allPlayersMatch = $userLastMatch->matchPlayers;
-//        dd($allPlayersMatch);
-        //connecté au dashboard et renvoie les infos concernant son équipe à l'utilisateur sur une vue
+        if ($teamCountSum !== 0) {
+            $teamVictoryRatio =  (float) number_format((($teamWiningCount/  $teamCountSum) * 100), 2, '.', '');
+        } else {
+            $teamVictoryRatio = 0;
+        }
 
-        return view('teams.show')
-            ->with('team', $team)
-            ->with('allPLayers', $allPlayersMatch);
+        // $userBestPlayersTeam récupère les 5 meilleurs joueurs de l'utilisateur dans son équipe
+        $userBestPlayersTeam = $userTeam->getPlayers->sortByDesc('score')->take(5);
+
+        //récupération du logo d ela team de l'utilisateur
+        $userHasLogo = $user->nbaTeams;
+        if(!$userHasLogo) {
+            $userLogo ='/storage/images/leagues_portal/picto_league_publique.png';
+            return view('teams.show')
+                ->with('team', $team)
+                ->with('logo', $userLogo)
+                ->with('userBestPlayersTeam', $userBestPlayersTeam)
+                ->with('teamValue', $teamValue)
+                ->with('teamVictoryRatio', $teamVictoryRatio);
+        } else {
+            $userLogo ='/storage/images/logos/' . $user->nbaTeams->name . '.png';
+            return view('teams.show')
+                ->with('team', $team)
+                ->with('logo', $userLogo)
+                ->with('userBestPlayersTeam', $userBestPlayersTeam)
+                ->with('teamValue', $teamValue)
+                ->with('teamVictoryRatio', $teamVictoryRatio);
+        }
 
     }
 

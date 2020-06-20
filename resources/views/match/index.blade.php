@@ -30,8 +30,6 @@
                         <th scope="col">Dernier Score</th>
                         <th scope="col">Blessé</th>
                         <th scope="col">choisir</th>
-
-
                     </tr>
                     </thead>
                     <tbody class="table-hover">

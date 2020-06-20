@@ -29,7 +29,7 @@ class GenerateMatchesCalender extends Command
             //date limite à partir de laquelle la draft prend fin et le calendrier des matches est généré
             $limitTime = $draft->ends_at;
 
-            if($draft->is_over === 1 && $limitTime <= now()) {
+            if($draft->is_over === 0 && $limitTime <= now()) {
 
             // booléen bought pour enregistrer la draft comme terminée
            $draft->update(['is_over' => 1]);

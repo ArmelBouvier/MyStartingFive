@@ -154,7 +154,7 @@
                 <div class="col-md-6" id="fourth-step"></div>
             </div>
             <div class="row">
-                <div class="col-12 text-center"><a href="#" class="btn btn-secondary">Let's go !</a></div>
+                <div class="col-12 text-center"><a href="{{'leagues'}}" class="btn btn-secondary">Let's go !</a></div>
             </div>
         </div>
     </div>
