@@ -86,7 +86,7 @@
                 <p class="text-white py-2 overflow-auto w-50">Suis les conseils de <b class="quaternary">Mr.MVP</b>
                     à la lettre pour être sur d'avoir toutes les cartes en main pour <b class="quaternary">écraser</b>
                     tes adversaires et rouler jusqu'au titre de <b class="quaternary">champion</b>.</p>
-                <button class="bouton-inscription my-4">Lire l'article complet</button>
+                <a href="{{ ('/tuto') }}" class="bouton-inscription my-4">Lire l'article complet</a>
             </div>
         </div>
     </div>
