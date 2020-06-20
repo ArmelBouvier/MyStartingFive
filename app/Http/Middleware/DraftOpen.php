@@ -21,16 +21,21 @@ class DraftOpen
         if($request->user()) {
 
             if($request->user()->leagues[0]->id){
+
                 if($request->user()->team){
 
                     $leagueId = $request->user()->leagues[0]->id;
 
                     $draft = Draft::where('league_id', $leagueId)->first();
-                    $draftEnds = $draft->is_over;
-                    if($request->user()->leagues[0]->isActive === 1 && $draftEnds === 0 ) {
+                   if($draft) {
+                       $draftEnds = $draft->is_over;
+                       if($request->user()->leagues[0]->isActive === 1 && $draftEnds === 0 ) {
 
-                        return $next($request);
-                    }
+                           return $next($request);
+                       }
+                       return redirect()->back();
+                   }
+
                     return redirect()->back();
                 }
                 return redirect()->back();

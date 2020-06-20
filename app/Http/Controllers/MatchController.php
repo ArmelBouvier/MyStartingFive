@@ -21,15 +21,13 @@ class MatchController extends Controller
 
         // league à laquelle appartient l'utilisateur
         $userLeagueId = $user->team->league_id;
-        //dd($userLeagueId);
 
         // Le nom de la league à laquelle appartient l'utilisateur
-        $userNameLeague = $user->team->getLeague->name;
-        //dd($userNameLeague);
+        $userNameLeague = $user->team->getLeague->name;;
 
         // $userTeam récupère l'équipe de l'utilisateur
         $userTeam = Team::where('user_id', $user->id)->first();
-        //dd($userTeam);
+
 
         //-------------------------  RECUPERATION  DONNES JOEURS DE LA TEAM DE L'UTILISATEUR -------------------------//
 
@@ -46,7 +44,7 @@ class MatchController extends Controller
             ->orderBy('start_at','asc')
             ->get()
             ->first();
-        //dd($userNextMatch->homeTeamName);
+
 
         // récupérer les joueurs déjà enregistrés pour la composition du prochain match
         $playersSelected = [];
@@ -61,7 +59,6 @@ class MatchController extends Controller
         }
 
 
-
         return view('match.index')->with('userNextMatch',$userNextMatch)
                 ->with('userPlayersTeam', $userPlayersTeam)
                 ->with('playersSelected', $playersSelected);
@@ -73,11 +70,9 @@ class MatchController extends Controller
 
         // league à laquelle appartient l'utilisateur
         $userLeagueId = $user->team->league_id;
-        //dd($userLeagueId);
 
         // Le nom de la league à laquelle appartient l'utilisateur
         $userNameLeague = $user->team->getLeague->name;
-        //dd($userNameLeague);
 
         // $userTeam récupère l'équipe de l'utilisateur
         $userTeam = Team::where('user_id', $user->id)->first();
@@ -130,7 +125,9 @@ class MatchController extends Controller
                 if($userTeam->id === $team->id ){
                     $playersSelectedIds[] = $playerFromNextMatch->id;
                     $playerFromNextMatchPosition = json_decode($playerFromNextMatch->data);
-                    $playersSelectedPositions[] = $playerFromNextMatchPosition->pl->pos;
+                    $positionPlayer = $playerFromNextMatchPosition->pl->pos;
+                    $positionPlayer  = substr($positionPlayer, 0,1);
+                    $playersSelectedPositions[] = $positionPlayer;
 
                 }
             }
@@ -142,7 +139,7 @@ class MatchController extends Controller
         $playerInfos = json_decode($playerInMatch->data);
         $positionPlayer = $playerInfos->pl->pos;
         $positionPlayer  = substr($positionPlayer, 0,1);
-        $maxPlayersFromPosition = 0;
+
         if($positionPlayer === "G") {
             $maxPlayersFromPosition = 2;
         } else if ($positionPlayer === "F") {
@@ -165,6 +162,7 @@ class MatchController extends Controller
                 'name' => $playerName,
                 'lastname' => $playerInfos->pl->ln,
                 'position' => $positionPlayer,
+                'photo_url' => $playerInMatch->photo_url,
             ];
             return $json;
 

@@ -233,10 +233,13 @@ class DraftController extends Controller
      *
      * @param int $id
      * @return Response
+     * @param Request $request
      */
 
-    public function auction($id)
+    public function auction(Request $request, $id)
     {
+        date_default_timezone_set ('Europe/Paris' );
+
         $user = Auth::user();
         $userLeagueId = $user->team->league_id;
         $leagueTeams = Team::where('league_id', $userLeagueId)->get();
@@ -248,6 +251,9 @@ class DraftController extends Controller
         //recuperer l'équipe de l'utilisateur qui enregistre l'enchère
         $team = Team::where('user_id', $user->id)->get()->first();;
         $player = Player::where('id', $id)->get()->first();
+
+        //valeur minimum enchère
+        $minimumAuctionValue = 5;
 
         //si le joueur (id) a déjà été drafté par une autre équipe de la ligue l'ajout n'est pas possible
         $isAlreadyDrafted = $player->teams()->whereIn('team_id', $teamsInLeagueId)->get()->first();
@@ -266,22 +272,20 @@ class DraftController extends Controller
         //salary_cap - la somme des enchères qu'il a en cours
         $moneyAvailable = $currentSalaryCap - $auctions;
 
+//        RECUPERATION DES DONNES ENCHERE SUR LE JOUEUR SELECTIONNE PAR UTILISATEUR
         //prix actuel du joueur selon la dernière enchère faite dans la ligue
-        // récupère les enchères en cours dans la ligue
-        $auctionsOnPlayers = DB::table('auctions')
-            ->leftjoin('players', 'players.id', '=', 'auctions.player_id')
-            ->whereIn('team_id', $teamsInLeagueId)
+        $lastAuctionOnSelectedPlayer = Auction::whereIn('team_id', $teamsInLeagueId)
             ->where('bought', '=',0)
+            ->where('player_id', $id)
             ->orderBy('auction', 'desc')
-            ->get();
+            ->first();
+        //s'il n'y a pas déjà d'enchère en cours sur ce joueur, l'enchère est à 0
+        if(!$lastAuctionOnSelectedPlayer) {
+            $lastAuctionOnSelectedPlayer = 0;
+        } else {
+            $lastAuctionOnSelectedPlayer = $lastAuctionOnSelectedPlayer->auction;
+        };
 
-        //tableau pour stocker les ids de tous les joueurs qui ont des enchères en cours sur celle ligue
-        $playerLatestAuction = 0;
-        foreach ($auctionsOnPlayers as $auctionsOnPlayer){
-            if($auctionsOnPlayer->player_id === $id ){
-                $playerLatestAuction = $auctionsOnPlayer->auction;
-            }
-        }
 
 // ------   VERIFIER QUE LE NOMBRE MAX DE JOUEUR A DRAFTER NE SOIT PAS DEPASSER ---------//
         //retourne les joueurs draftés par l'utilisateur
@@ -320,14 +324,24 @@ class DraftController extends Controller
             $limit = 5;
         }
 
-        if(empty($isAlreadyDrafted) && $moneyAvailable >= $player->price
-            && $moneyAvailable >= $playerLatestAuction && $nbDraftedPlayers < 12 && $nbPosition < $limit) {
+        if(empty($isAlreadyDrafted) && $moneyAvailable >= ($player->price + $minimumAuctionValue)
+            && $moneyAvailable >= ($lastAuctionOnSelectedPlayer + $minimumAuctionValue)
+            && $nbDraftedPlayers < 12 && $nbPosition < $limit) {
+
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
+
+            //si la valeur de la dernière enchère existe et n'est donc pas égal à 0 selon ce qu'on a défini, la valeur de l'enchère est
+            //la valeur initiale du joueur
+            if($lastAuctionOnSelectedPlayer !== 0) {
+                $auctionPrice = $lastAuctionOnSelectedPlayer + $minimumAuctionValue;
+            } else {
+                $auctionPrice = $player->price;
+            }
 
             $data = [[
                 'team_id' => $team->id,
                 'player_id' => $id,
-                'auction' => $player->price,
+                'auction' => $auctionPrice,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'auction_time_limit' => $auctionTimeLimit,
@@ -378,6 +392,8 @@ class DraftController extends Controller
      */
 
     public function updateAuction(Request $request, $id){
+        date_default_timezone_set ( 	'Europe/Paris' );
+
         $user = Auth::user();
         $userLeagueId = $user->team->league_id;
         $leagueTeams = Team::where('league_id', $userLeagueId)->get();

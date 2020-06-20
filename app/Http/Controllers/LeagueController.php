@@ -142,12 +142,19 @@ class LeagueController extends Controller
             $teamsID[]= $leagueTeam->id;
         }
 
-        // Calcul de la valeur de chaque équipe de la league
-        $userPlayers = $userTeam->getPlayers;
-        $teamValue = 0;
-        foreach($userPlayers as $player){
-            $teamValue += $player->price;
-        }
+//        // Calcul de la valeur de chaque équipe de la league
+//        $allLeagueTeamsPlayers = [];
+//        $allLeagueTeamsValues = [];
+//        foreach ($allLeagueTeams as $leagueTeam){
+//            $allLeagueTeamsPlayers[] = $allLeagueTeams->getPlayers;
+//            $teamValue = 0;
+//            foreach($allLeagueTeamsPlayers as $player){
+//                $teamValue += $player->price;
+//
+//            }
+//            $allLeagueTeamsValues[] = $teamValue;
+//        }
+//        dd($allLeagueTeamsValues);
 
         // Calcul du pourcentage de victoire de chaque équipe de la league
         $teamVictoryRatio = [];
@@ -208,6 +215,7 @@ class LeagueController extends Controller
                 $data->isActive = $request->isActive;
                 $data->save();
 
+                date_default_timezone_set ( 	'Europe/Paris' );
                 //enregistrement du début de la draft avec heure de fin
                 $draftEnd = now()->addMinutes(2);
                 $draft = new Draft();

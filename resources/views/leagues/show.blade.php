@@ -91,21 +91,21 @@
                                 En attente du lancement de la league !
                             @endif
                         </td>
-                        <td>
-                            @if($league->isActive === 1)
-                                @if($user->team !== null)
-                                    @if($league)
-                                        {{$teamVictoryRatio[$user->team->id]}}
-                                    @else
-                                        La draft doit être achevée !
-                                    @endif
-                                @else
-                                    L'équipe doit être créée !
-                                @endif
-                            @else
-                                En attente du lancement de la league !
-                            @endif
-                        </td>
+{{--                        <td>--}}
+{{--                            @if($league->isActive === 1)--}}
+{{--                                @if($user->team !== null)--}}
+{{--                                    @if($league)--}}
+{{--                                        {{$teamVictoryRatio[$user->team->id]}}--}}
+{{--                                    @else--}}
+{{--                                        La draft doit être achevée !--}}
+{{--                                    @endif--}}
+{{--                                @else--}}
+{{--                                    L'équipe doit être créée !--}}
+{{--                                @endif--}}
+{{--                            @else--}}
+{{--                                En attente du lancement de la league !--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
                     </tr>
                 @endforeach
                 </tbody>
@@ -113,5 +113,16 @@
         </div>
     </div>
 @endsection
+@section('script-footer')
+    <script>
 
+        $.ajax({
+            url: '',
+            success: function(data) {
+                $('body').html(data);
+            }
+        });
+
+    </script>
+@endsection
 
