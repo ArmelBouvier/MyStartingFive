@@ -40,10 +40,6 @@
         <div class="col-md-8 collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Bouton de navigation -->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link bouton-header"
-                       href="{{ route('dashboard.profile', Auth::user()->id)}}">{{ __('Profil') }}</a>
-                </li>
 
                 <li class="nav-item active">
                     <a class="nav-link bouton-header"

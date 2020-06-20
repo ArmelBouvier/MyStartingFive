@@ -32,16 +32,16 @@ class DashboardController extends Controller
 
         $userHasLogo = $user->nbaTeams;
         //dd($userHasLogo);
-        if(!$userHasLogo) {
-            $userLogo ='/storage/images/leagues_portal/picto_league_publique.png';
+        if (!$userHasLogo) {
+            $userLogo = '/storage/images/leagues_portal/picto_league_publique.png';
         } else {
-            $userLogo ='/storage/images/logos/' . $user->nbaTeams->name . '.png';
+            $userLogo = '/storage/images/logos/' . $user->nbaTeams->name . '.png';
         }
 
         // Twitterfeed de l'équipe favorite de l'utilisateur
         $userTwitterFeed = $user->nbaTeams;
 
-        if ($usersInleagues === true){
+        if ($usersInleagues === true) {
             $userLeague = DB::table('league_user')
                 ->where('league_user.user_id', $userId)
                 ->first();
@@ -53,14 +53,14 @@ class DashboardController extends Controller
                 ->where('teams.user_id', '=', $userId)
                 ->exists();
 
-            if ($userHasTeam === true){
+            if ($userHasTeam === true) {
                 $userLeagueActive = $userCurrentLeague->isActive;
                 $userTeamId = $user->team->id;
                 $userHasPlayers = DB::table('player_team')
                     ->where('player_team.team_id', $userTeamId)
                     ->exists();
 
-                if ($userLeagueActive === 1 && $userHasPlayers === true){
+                if ($userLeagueActive === 1 && $userHasPlayers === true) {
                     $draftIsOver = $userCurrentLeague->draft->is_over;
 
                     if ($draftIsOver === 1) {
@@ -245,7 +245,7 @@ class DashboardController extends Controller
                             ->with('league', $userLeague)
                             ->with('team', $user->team)
                             ->with('draftIsOver', $draftIsOver)
-                            ->with('userPlayersTeam',  $userPlayersTeam)
+                            ->with('userPlayersTeam', $userPlayersTeam)
                             ->with('homeTeamNextMatch', $homeTeamNextMatch)
                             ->with('userHomeNextMatch', $userHomeNextMatch)
                             ->with('awayTeamNextMatch', $awayTeamNextMatch)
@@ -257,7 +257,7 @@ class DashboardController extends Controller
                             ->with('userLastMatch', $userLastMatch)
                             ->with('userNextMatchs', $userNextMatchs);
 
-                    }else{
+                    } else {
                         return view('dashboard.index')
                             ->with('user', $user)
                             ->with('userTwitterFeed', $userTwitterFeed)
@@ -265,39 +265,26 @@ class DashboardController extends Controller
                             ->with('team', $user->team)
                             ->with('draftIsOver', $draftIsOver);
                     }
-                }else{
+                } else {
                     return view('dashboard.index')
                         ->with('user', $user)
                         ->with('userTwitterFeed', $userTwitterFeed)
                         ->with('league', $userLeague)
                         ->with('team', $user->team);
                 }
-            }else{
+            } else {
                 return view('dashboard.index')
                     ->with('user', $user)
                     ->with('userTwitterFeed', $userTwitterFeed)
                     ->with('league', $userLeague)
                     ->with('team', $user->team);
             }
-        }else{
+        } else {
             return view('dashboard.index')
                 ->with('user', $user)
-                ->with('userTwitterFeed', $userTwitterFeed)
-                ;
+                ->with('userTwitterFeed', $userTwitterFeed);
         }
 
 
     }
-
-    public function profile($id)
-    {
-        $user = User::where('id', '=', $id)->first();
-        return view('dashboard.profile', compact('user'));
-    }
-
-    public function  match_result()
-    {
-        return view('dashboard.match_result');
-    }
-
 }

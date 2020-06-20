@@ -1,4 +1,7 @@
-html { height: 100%; }
+html {
+    height: 100%;
+}
+
 .countdown {
     min-height: 100%;
     display: flex;
@@ -15,7 +18,9 @@ html { height: 100%; }
 
     *,
     *:before,
-    *:after { box-sizing: border-box; }
+    *:after {
+        box-sizing: border-box;
+    }
 }
 
 .flip-clock__piece {
@@ -91,7 +96,7 @@ $borderRadius: 0.15em;
 }
 
 .flip .card__back::before {
-    animation: flipTop 0.3s cubic-bezier(.37,.01,.94,.35);
+    animation: flipTop 0.3s cubic-bezier(.37, .01, .94, .35);
     animation-fill-mode: both;
     transform-origin: center bottom;
 }
@@ -99,7 +104,7 @@ $borderRadius: 0.15em;
 .flip .card__back .card__bottom {
     transform-origin: center top;
     animation-fill-mode: both;
-    animation: flipBottom 0.6s cubic-bezier(.15,.45,.28,1);// 0.3s;
+    animation: flipBottom 0.6s cubic-bezier(.15, .45, .28, 1); // 0.3s;
 }
 
 @keyframes flipTop {
@@ -132,19 +137,25 @@ $borderRadius: 0.15em;
     }
 }
 
-.bg-countdown{
+.bg-countdown {
     background: url("/../storage/images/bg-countdown.jpg") center no-repeat;
     width: 100%;
     background-size: cover;
 }
 
-.bg-team{
+.bg-lastmatch {
+    background: url("/../storage/images/bg-lastmatch.jpg") center no-repeat;
+    width: 100%;
+    background-size: cover;
+}
+
+.bg-team {
     background: $white;
     border: solid 1px $white;
     border-radius: 5px;
 }
 
-.radius25{
+.radius25 {
     border-radius: 25px;
 }
 
