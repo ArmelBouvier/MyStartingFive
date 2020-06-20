@@ -247,10 +247,10 @@
                                     @endphp
                                     <tr class="">
                                         <td width="30%">
-                                            @if($guards->photo_url === 'image')
+                                            @if($guard->photo_url === 'image')
                                                 <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
                                             @else
-                                                <img src="{{$guards->photo_url}}"
+                                                <img src="{{$guard->photo_url}}"
                                                      class="w-25 rounded-circle pr-1">
                                             @endif
                                         </td>
@@ -304,6 +304,7 @@
                                 <tbody>
                                 @foreach($centers as $center)
                                     @php
+
                                         $playerInfos = json_decode($center->data);
                                         $position  = substr($playerInfos->pl->pos, 0,1)
                                     @endphp
