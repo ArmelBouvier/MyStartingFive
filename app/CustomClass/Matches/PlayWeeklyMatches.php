@@ -14,7 +14,7 @@ class PlayWeeklyMatches extends Command
 
     public function handle(){
         $matches = Match::all();
-
+        date_default_timezone_set ( 	'Europe/Paris' );
         foreach ($matches as $match) {
             $limitTime = $match->start_at;
             // Calcule du score de la team de l'utilisateur
