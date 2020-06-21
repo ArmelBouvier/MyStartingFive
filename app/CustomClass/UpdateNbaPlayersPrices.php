@@ -33,6 +33,9 @@ class UpdateNbaPlayersPrices extends Command
 
                 $generalGrade = ($assists + $points + $rebounds + $steals + $blocks + ($turnovers) + $minutes);
                 $generalGrade = round($generalGrade);
+                if($generalGrade < 5) {
+                    $generalGrade = 0;
+                }
                 Player::where('id', $player->id)->update(['price' => $generalGrade]);
 
             }
