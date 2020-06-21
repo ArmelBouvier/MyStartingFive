@@ -236,7 +236,7 @@
                         </div>
                         @if(isset($guards) && !empty($guards))
                             <table class="table table-dark table-sm">
-                                <thead>
+                                <thead class="bg-card-title">
                                 <tr>
                                     <th scope="col" colspan="3">Arrières</th>
                                     <th>{{count($guards)}} / 5</th>
@@ -251,10 +251,10 @@
                                     <tr class="">
                                         <td width="30%">
                                             @if($guard->photo_url === 'image')
-                                                <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                                <i class="fas fa-user fa-2x main-color text-center"></i>
                                             @else
                                                 <img src="{{$guard->photo_url}}"
-                                                     class="w-25 rounded-circle pr-1">
+                                                     class="w-25 rounded-circle m-auto">
                                             @endif
                                         </td>
                                         <td>{{$position}}</td>
@@ -267,7 +267,7 @@
                         @endif
                         @if(isset($forwards) && !empty($forwards))
                             <table class="table table-dark table-sm">
-                                <thead>
+                                <thead class="bg-card-title">
                                 <tr>
                                     <th scope="col" colspan="3">Ailiers</th>
                                     <th>{{count($forwards)}} / 5</th>
@@ -298,7 +298,7 @@
                         @endif
                         @if(isset($centers) && !empty($centers))
                             <table class="table table-dark table-sm">
-                                <thead>
+                                <thead class="bg-card-title">
                                 <tr>
                                     <th scope="col" colspan="3">Pivots</th>
                                     <th>{{count($centers)}} / 2</th>
@@ -334,7 +334,7 @@
                 {{-----------------------ENCHERES EN COURS ---------------------}}
                 <div class="row mt-5">
                     <div class="col-md-12 text-white">
-                        <div class="bg-card-title text-center py-1">
+                        <div class="bg-card-title text-center py-1 mb-3">
                             <h2 class="mb-0 text-center">Enchères En cours</h2>
                         </div>
                     </div>
@@ -354,6 +354,17 @@
                     <div class="row mx-0 my-1">
                         <div class="col-12 MS5card">
                             <div class="row bg-card-title text-right">
+                                <div class="col-md-2 h-100 px-0 d-flex flex-start">
+                                    <form
+                                        action="{{ route('draft.delete.auction', ['id' => $auction->player_id])}}"
+                                        method="POST" class="">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="h-100 btn btn-primary rounded-circle">X
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-md-10">
                                 @php
                                     $limitTime = new DateTime($auction->auction_time_limit);
                                     $limitTimeMin = $limitTime->format('i');
@@ -367,28 +378,30 @@
                                     $differenceSec= abs($nowSec - $limitTimeSec);
 
                                 @endphp
-                                <p class="p-1 pr-2 text-right w-100">Fin de l'enchère : {{ $differenceMin}} min {{$differenceSec}}</p>
+                                    <p class="p-1 pr-2 text-right w-100">Fin de l'enchère : {{ $differenceMin}} min {{$differenceSec}}</p>
+                                </div>
+
                             </div>
                             <div class="row d-flex align-items-center justify-content-center">
                                 <div class="col-md-4 d-flex flex-column">
                                     @if($auction->getPlayerData->photo_url === 'image')
-                                        <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                        <i class="fas fa-user fa-2x ml-3 mr-4 main-color text-center"></i>
                                     @else
                                         <img src="{{$auction->getPlayerData->photo_url}}"
-                                             class="w-100 rounded-circle pr-1">
+                                             class="w-100 h-auto rounded-circle pr-1">
                                     @endif
                                         <p class="text-center">{{$position}}</p>
                                 </div>
-                                <div class="col-md-4">
-                                    <p>{{$playerData->pl->fn}} {{strtoupper($playerData->pl->ln)}}</p>
+                                <div class="col-md-6">
+                                    <p class="py-1">{{$playerData->pl->fn}} {{strtoupper($playerData->pl->ln)}}</p>
 
                                         <form
                                             action="{{ route('draft.auction.updateValue', ['id' => $auction->player_id])}}"
-                                            method="POST" class="form-group  d-flex justify-content-center">
+                                            method="POST" class="form-group d-flex justify-content-center">
                                             @php $indicator = true @endphp
                                             @foreach($auctionsOnPlayers as $auctionsOnPlayer)
                                                 @if($auctionsOnPlayer->player_id === $auction->player_id && $indicator)
-                                                    <input class="form-control" type="number" name="auctionValue"
+                                                    <input class="form-control w-&00" type="number" name="auctionValue"
                                                            id="auctionValue" value="{{$auctionsOnPlayer->auction}}" step="5"
                                                            min="{{$auctionsOnPlayer->auction}}">
                                                     @php $indicator = false @endphp
@@ -396,10 +409,10 @@
                                             @endforeach
                                             @method('POST')
                                             @csrf
-                                            <button type="submit" class="btn btn-primary">enchérir</button>
+                                            <button type="submit" id="btn-auction" class="btn btn-primary">enchérir</button>
                                         </form>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2 mx-0 px-0">
                                     @php $indicator = true @endphp
                                     @foreach($auctionsOnPlayers as $auctionsOnPlayer)
 

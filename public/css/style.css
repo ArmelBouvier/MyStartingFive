@@ -156,6 +156,14 @@ h3 {
   max-height: 50px !important;
 }
 
+#draft-container #auctionValue {
+  font-size: 0.8rem !important;
+}
+
+#draft-container #btn-auction {
+  font-size: 0.8rem !important;
+}
+
 #draft-container .cardcountdown {
   display: block;
   position: relative;
