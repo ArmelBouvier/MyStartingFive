@@ -170,7 +170,7 @@ class TeamController extends Controller
         $userHasLogo = $user->nbaTeams;
 
         if (Auth::user()->team->id) {
-            if (Auth::user()->team->id === $team) {
+            if (Auth::user()->team->id === $team->id) {
                 if (!$userHasLogo) {
                     $userLogo = '/storage/images/leagues_portal/picto_league_publique.png';
                     return view('teams.show')
