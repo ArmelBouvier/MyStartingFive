@@ -62,6 +62,7 @@ Route::resource('teams', 'TeamController')->middleware('auth');
 // Routes concernant l'affichage du match
 Route::prefix('match')
     ->middleware('auth')
+    ->middleware('match')
     ->name('match.')
     ->group(function () {
         Route::resource('/', 'MatchController');

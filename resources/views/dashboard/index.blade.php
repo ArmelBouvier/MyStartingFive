@@ -3,6 +3,16 @@
 @section('content')
     {{--Titre de la page--}}
     <div class="container">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <br/>
+        @endif
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
                 <h1 class="text-white">Tableau de bord</h1>
@@ -194,14 +204,18 @@
                                             <div class="row flex-wrap justify-content-around">
                                                 <div class="col-md-4 pb-2 text-center">
                                                     @if ( ( $userHomeLastMatchLogo  !== 'Pas de logo' ||  $userAwayLastMatchLogo !== 'Pas de logo' ))
-                                                        <img class="w-50" src="{{$userHomeLastMatchLogo}}">
+                                                       <div class="col-md-12 h-75">
+                                                           <img class="w-75" src="{{$userHomeLastMatchLogo}}">
+                                                       </div>
                                                     @else
                                                     @endif
-                                                    <h4 class="text-white">{{$homeTeamLastMatch->name}}</h4>
-                                                    @if ( ($homeTeamLastMatch  !== 'Match pas fini' || $awayTeamLastMatch !== 'Match pas fini' ))
-                                                        <p class="tertiary text-center">{{$userHomeLastMatch->pseudo}}</p>
-                                                    @else
-                                                    @endif
+                                                    <div class="col-md-12 mt-2">
+                                                        <h4 class="text-white">{{$homeTeamLastMatch->name}}</h4>
+                                                        @if ( ($homeTeamLastMatch  !== 'Match pas fini' || $awayTeamLastMatch !== 'Match pas fini' ))
+                                                            <p class="tertiary text-center">{{$userHomeLastMatch->pseudo}}</p>
+                                                        @else
+                                                        @endif
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-4 text-center">
                                                     <h1 class="tertiary">{{ $userLastMatch->home_team_score }}
@@ -209,14 +223,18 @@
                                                 </div>
                                                 <div class="col-md-4 pb-2 text-center">
                                                     @if ( ( $userHomeLastMatchLogo  !== 'Pas de logo' ||  $userAwayLastMatchLogo !== 'Pas de logo' ))
-                                                        <img class="w-50" src="{{$userAwayLastMatchLogo}}">
+                                                        <div class="col-md-12 h-75">
+                                                            <img class="w-75" src="{{$userAwayLastMatchLogo}}">
+                                                        </div>
                                                     @else
                                                     @endif
-                                                    <h4 class="text-white">{{$awayTeamLastMatch->name}}</h4>
-                                                    @if ( $homeTeamLastMatch  !== 'Match pas fini' || $awayTeamLastMatch !== 'Match pas fini' )
-                                                        <p class="tertiary text-center">{{$userAwayLastMatch->pseudo}}</p>
-                                                    @else
-                                                    @endif
+                                                    <div class="col-md-12 mt-2">
+                                                        <h4 class="text-white">{{$awayTeamLastMatch->name}}</h4>
+                                                        @if ( $homeTeamLastMatch  !== 'Match pas fini' || $awayTeamLastMatch !== 'Match pas fini' )
+                                                            <p class="tertiary text-center">{{$userAwayLastMatch->pseudo}}</p>
+                                                        @else
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

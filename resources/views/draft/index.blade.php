@@ -6,7 +6,6 @@
                 <h1 class="text-center">DRAFT</h1>
             </div>
         </div>
-
         <div class="row alert-div">
 
         {{-----------------------VALIDER DRAFT ---------------------}}
@@ -99,7 +98,7 @@
         <div class="row justify-content-around">
             <div class="col-md-8">
                 <div class="row mx-3">
-                    <div class="col-12 d-flex py-1 flex-start">
+                    <div class="col-8 d-flex py-1 flex-start">
                         <div class="">
                             <a href="/draft" class="btn MS5card" id="btn-allPlayers">Tous les joueurs</a>
                         </div>
@@ -125,6 +124,9 @@
                                 <a href="/draft?position=C" class="bt p-1 dropdown-item text-left">Pivot</a>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-4 d-flex py-1 flex-start h-100">
+                        <a href="/draft" class="btn MS5card">Actualiser les enchères</a>
                     </div>
                 </div>
                 {{-----------------------TABLEAU JOUEURS NBA ---------------------}}
@@ -199,10 +201,11 @@
                                     @if(!in_array($player->id, $auctionPlayersId) && !in_array($player->id, $notDisplayedPlayers))
                                         <td colspan="2" class="align-middle">
                                             <form action="{{ route('draft.auction', ['id' => $player->id])}}"
-                                                  method="POST" class="mb-0">
+                                                  method="POST" class="mb-0" onsubmit="return confirmAuction('{{$playerStats->fn}}','{{$playerStats->ln}}')">
+                                                <input hidden value="{{$playerStats->ln}}">
                                                 @csrf
-                                                <button type="submit" class="btn btn-outline-light p-0 px-1">enchérir
-                                                </button>
+                                                <button type="submit" class="btn btn-outline-light p-0 px-1"> enchérir
+                                                </button >
                                             </form>
                                         </td>
                                     @elseif(in_array($player->id, $auctionPlayersId))
@@ -236,7 +239,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Arrières</th>
-                                    <th>{{count($guards)}}</th>
+                                    <th>{{count($guards)}} / 5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -267,7 +270,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Ailiers</th>
-                                    <th>{{count($forwards)}}</th>
+                                    <th>{{count($forwards)}} / 5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -298,7 +301,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Pivots</th>
-                                    <th>{{count($centers)}}</th>
+                                    <th>{{count($centers)}} / 2</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -422,7 +425,9 @@
                                         $nowSec = $now->format('s');
 
                                         $differenceMin = abs($nowMin - $limitTimeMin);
-                                        $differenceSec= abs($nowSec - $limitTimeSec)
+
+                                        $differenceSec= abs($nowSec - $limitTimeSec);
+
                                     @endphp
                                     <p>Fin de l'enchère dans {{ $differenceMin}} min {{$differenceSec}}</p>
                                 </div>
@@ -436,10 +441,23 @@
 @endsection
 @section('script-footer')
     <script>
+
         setInterval( function () {
 
             $('.alert-div').empty();
         }, 3000);
+
+        //pour bloquer envoie du formulaire
+        function confirmAuction(firstname, lastname){
+
+            let message = 'Es-tu sûr de vouloir mettre une enchère sur ' +firstname + ' '+lastname + ' ?';
+            let r = confirm(message);
+
+            if(r === false) {
+                return false;
+            }
+        }
+
 
 
         // --------------------- DECOMPTE AVANT Fin de Draft --------------------------------------//

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use function Symfony\Component\String\u;
 
 class LeagueController extends Controller
 {
@@ -103,15 +104,15 @@ class LeagueController extends Controller
 
             // Envoi d'un mail de confirmation
             $title = 'Confirmation de création league !';
-            $content = 'Salut, ta league ' . $newLeague['name'] .
-                ' a bien été créée et comporte ' . $newLeague['number_teams'] . ' équipes.<br>';
+            $content = 'Salut, ta league ' . '<b>' . $newLeague['name'] . '</b>' .
+                ' a bien été créée et comporte ' . '<b>' . $newLeague['number_teams'] . '</b>' . ' équipes.<br>';
 
             if ($publicLeague === 0) {
                 $content .= "Il s'agit d'une league publique, que tout le monde peut rejoindre";
             } else {
                 $content .= "Pour inviter tes potes, donne leur le mot de passe :<br><br> $token";
             }
-            $content .= "<br><br>Bonne route vers la gloire !";
+            $content .= "<br><br>Bonne route vers la gloire ! ⛹🏻⛹🏽‍ 🏆";
 
             Mail::to($email)->send(new Register($title, $content));
 
@@ -142,20 +143,16 @@ class LeagueController extends Controller
             $teamsID[]= $leagueTeam->id;
         }
 
-//        // Calcul de la valeur de chaque équipe de la league
-//        $allLeagueTeamsPlayers = [];
-//        $allLeagueTeamsValues = [];
-//        foreach ($allLeagueTeams as $leagueTeam){
-//            $allLeagueTeamsPlayers[] = $allLeagueTeams->getPlayers;
-//            $teamValue = 0;
-//            foreach($allLeagueTeamsPlayers as $player){
-//                $teamValue += $player->price;
-//
-//            }
-//            $allLeagueTeamsValues[] = $teamValue;
-//        }
-//        dd($allLeagueTeamsValues);
-
+        // Calcul de la valeur de chaque équipe de la league
+        $allLeagueTeamsValues = [];
+        foreach ($allLeagueTeams as $leagueTeam){
+            $leagueTeamPlayers = $leagueTeam->getPlayers;
+            $teamValue = 0;
+            foreach($leagueTeamPlayers as $player){
+                $teamValue += $player->price;
+            }
+            $allLeagueTeamsValues[$leagueTeam->id] = $teamValue;
+        }
         // Calcul du pourcentage de victoire de chaque équipe de la league
         $teamVictoryRatio = [];
         foreach ($teamsID as $team){
@@ -169,23 +166,36 @@ class LeagueController extends Controller
                 $teamVictoryRatio[$team] = 0;
             }
         }
+        $userInleague = DB::table('league_user')
+            ->where('league_user.user_id', Auth::user()->id)
+            ->first();
 
-        // Check du statut de la draft
-        if($league->isActive === 1){
-            $draftStatus = $league->draft->is_over;
-            return view('leagues.show')
-                ->with('league', $league)
-                ->with('teamVictoryRatio', $teamVictoryRatio)
-                ->with('draftStatus', $draftStatus);
+        if( $userInleague->league_id){
+            if ($userInleague->league_id === $leagueId){
+                // Check du statut de la draft
+                if($league->isActive === 1){
+                    $draftStatus = $league->draft->is_over;
+                    return view('leagues.show')
+                        ->with('league', $league)
+                        ->with('teamVictoryRatio', $teamVictoryRatio)
+                        ->with('draftStatus', $draftStatus)
+                        ->with('allLeagueTeamsValues', $allLeagueTeamsValues);
+                }else{
+                    $draftStatus = 0;
+                    $allLeagueTeamsValues = 'Draft en cours';
+                    return view('leagues.show')
+                        ->with('league', $league)
+                        ->with('teamVictoryRatio', $teamVictoryRatio)
+                        ->with('draftStatus', $draftStatus)
+                        ->with('allLeagueTeamsValues', $allLeagueTeamsValues);
+                }
+            }else{
+                return redirect()->route('dashboard.index', Auth::user()->id)->withErrors('Ce n\'est pas ta league !');
+            }
+
         }else{
-            $draftStatus = 0;
-            return view('leagues.show')
-                ->with('league', $league)
-                ->with('teamVictoryRatio', $teamVictoryRatio)
-                ->with('draftStatus', $draftStatus);
+            return redirect()->route('dashboard.index', Auth::user()->id)->withErrors('Tu n\'as pas de league !');
         }
-
-
     }
 
     /**
@@ -236,8 +246,9 @@ class LeagueController extends Controller
 
                 // Envoi d'un mail de lancement de la draft
                 $title = 'Lancement de la draft !';
-                $content = 'Salut, ta league ' . $data->name .
-                    ' viens d\'entamer sa draft ! Connecte toi vite pour y participer';
+                $content =  'Salut,' . '<br><br>' .
+                            'Ta league ' . '<b>' . $data->name . '</b>' .
+                            ' viens d\'entamer sa draft !' .  '<br><br>' . 'Connecte toi vite pour y participer';
 
 
 
@@ -277,12 +288,10 @@ class LeagueController extends Controller
 
             // suppression de la league
             $league->delete();
-
             return redirect(route('leagues.index'))->with('success', 'La league a bien été supprimée.');
         }else{
             // suppression de la league
             $league->delete();
-
             return redirect(route('leagues.index'))->with('success', 'La league a bien été supprimée.');
         }
     }

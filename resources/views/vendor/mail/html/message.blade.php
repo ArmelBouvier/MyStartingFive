@@ -13,7 +13,7 @@
 @isset($subcopy)
 @slot('subcopy')
 @component('mail::subcopy')
-{{ $subcopy }}
+{{ 'A bientôt chez MS5  🏀🏀'  }}
 @endcomponent
 @endslot
 @endisset

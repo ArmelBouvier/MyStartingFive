@@ -40,7 +40,7 @@ class TeamController extends Controller
             ->where('league_user.user_id', $userId)
             ->exists();
         //Vérification si l'utilisateur a une league
-        if($userLeague === true){
+        if ($userLeague === true) {
             $userGetLeague = DB::table('league_user')
                 ->leftjoin('leagues', 'leagues.id', '=', 'league_user.league_id')
                 ->where('league_user.user_id', $userId)
@@ -52,15 +52,15 @@ class TeamController extends Controller
             } else {
                 //récupérer l'équipe favorite du joueur pour lui afficher le logo correspondant
                 $userHasLogo = $user->nbaTeams;
-                if(!$userHasLogo) {
-                    $userLogo ='/storage/images/leagues_portal/picto_league_publique.png';
+                if (!$userHasLogo) {
+                    $userLogo = '/storage/images/leagues_portal/picto_league_publique.png';
                     return view('teams.create')->with('userLogo', $userLogo);
                 } else {
-                    $userLogo ='/storage/images/logos/' . $user->nbaTeams->name . '.png';
+                    $userLogo = '/storage/images/logos/' . $user->nbaTeams->name . '.png';
                     return view('teams.create')->with('userLogo', $userLogo);
                 }
             }
-        }else{
+        } else {
             return redirect()->route('leagues.index')->withErrors('Tu dois d\'abord rejoindre ou créer une league !');
         }
     }
@@ -148,7 +148,7 @@ class TeamController extends Controller
         // Calcul de la cote cumulée de l'équipe
         $userPlayers = $userTeam->getPlayers;
         $teamValue = 0;
-        foreach($userPlayers as $player){
+        foreach ($userPlayers as $player) {
             $teamValue += $player->price;
         }
         // Calcul du pourcentage de victoire de l'équipe
@@ -158,7 +158,7 @@ class TeamController extends Controller
         $teamCountSum = $teamHomeCount + $teamAwayCount;
 
         if ($teamCountSum !== 0) {
-            $teamVictoryRatio =  (float) number_format((($teamWiningCount/  $teamCountSum) * 100), 2, '.', '');
+            $teamVictoryRatio = (float)number_format((($teamWiningCount / $teamCountSum) * 100), 2, '.', '');
         } else {
             $teamVictoryRatio = 0;
         }
@@ -168,22 +168,32 @@ class TeamController extends Controller
 
         //récupération du logo d ela team de l'utilisateur
         $userHasLogo = $user->nbaTeams;
-        if(!$userHasLogo) {
-            $userLogo ='/storage/images/leagues_portal/picto_league_publique.png';
-            return view('teams.show')
-                ->with('team', $team)
-                ->with('logo', $userLogo)
-                ->with('userBestPlayersTeam', $userBestPlayersTeam)
-                ->with('teamValue', $teamValue)
-                ->with('teamVictoryRatio', $teamVictoryRatio);
+
+        if (Auth::user()->team->id) {
+            if (Auth::user()->team->id === $team->id) {
+                if (!$userHasLogo) {
+                    $userLogo = '/storage/images/leagues_portal/picto_league_publique.png';
+                    return view('teams.show')
+                        ->with('team', $team)
+                        ->with('logo', $userLogo)
+                        ->with('userBestPlayersTeam', $userBestPlayersTeam)
+                        ->with('teamValue', $teamValue)
+                        ->with('teamVictoryRatio', $teamVictoryRatio);
+                } else {
+                    $userLogo = '/storage/images/logos/' . $user->nbaTeams->name . '.png';
+                    return view('teams.show')
+                        ->with('team', $team)
+                        ->with('logo', $userLogo)
+                        ->with('userBestPlayersTeam', $userBestPlayersTeam)
+                        ->with('teamValue', $teamValue)
+                        ->with('teamVictoryRatio', $teamVictoryRatio);
+                }
+            } else {
+                return redirect()->route('dashboard.index', Auth::user()->id)->withErrors('Ce n\'est pas ta team !');
+            }
+
         } else {
-            $userLogo ='/storage/images/logos/' . $user->nbaTeams->name . '.png';
-            return view('teams.show')
-                ->with('team', $team)
-                ->with('logo', $userLogo)
-                ->with('userBestPlayersTeam', $userBestPlayersTeam)
-                ->with('teamValue', $teamValue)
-                ->with('teamVictoryRatio', $teamVictoryRatio);
+            return redirect()->route('dashboard.index', Auth::user()->id)->withErrors('Tu n\'as pas de team !');
         }
 
     }

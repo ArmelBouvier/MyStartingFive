@@ -48,7 +48,7 @@ class DraftController extends Controller
         $team = Team::where('user_id', $user->id)->first();
 
         // tous les joueurs
-        $players = Player::where('price', '>', 1)->orderBy('price', 'desc')->Paginate(20);
+        $players = Player::orderBy('price', 'desc')->Paginate(20);
 
         // id de tous les joueurs draftés
         $draftedPlayers = Player::all();
@@ -106,14 +106,18 @@ class DraftController extends Controller
                 ->Paginate(20);
 
         }
-        if (request()->has('position&order')) {
-
-        }
 
 //----------- retourne toutes données relatives enchères en cours de l'utilisateur -------------------- //
 
-        //retourne toutes les enchères en cours de l'utilisateur
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+
+        //retourne toutes les enchères en cours de l'utilisateur pour les joueurs non draftés
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
 
         // stocker les id des joueurs sur lesquels l'utilisateur a mis une enchère pour ne plus afficher le bouton enchérir dans la view
         $auctionPlayersId = [];
@@ -258,8 +262,14 @@ class DraftController extends Controller
         //si le joueur (id) a déjà été drafté par une autre équipe de la ligue l'ajout n'est pas possible
         $isAlreadyDrafted = $player->teams()->whereIn('team_id', $teamsInLeagueId)->get()->first();
 
-        //enchères en cours de l'utilisateur et salary cap actuel
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+        // ---- ENCHERES EN COURS ET SALARY CAP ACTUEL DE LUTILISATEUR -----------//
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
 
         if($auctions) {
             $auctions = $auctions->sum("auction");
@@ -355,7 +365,7 @@ class DraftController extends Controller
                 $message = 'Tu as déjà  drafté ce joueur !';
             } elseif($moneyAvailable < $player->price) {
                 $message = 'Ce joueur est trop cher pour toi !';
-            }  elseif ($moneyAvailable < $playerLatestAuction) {
+            }  elseif ($moneyAvailable < $lastAuctionOnSelectedPlayer) {
                 $message = 'Tu n\'as plus assez d\'argent !';
             } elseif($nbDraftedPlayers >= 12) {
                 $message = 'Tu as déjà drafté 12 joueurs !';
@@ -410,8 +420,15 @@ class DraftController extends Controller
         //si le joueur (id) a déjà été drafté par une autre équipe de la ligue l'ajout n'est pas possible
         $isAlreadyDrafted = $player->teams()->whereIn('team_id', $teamsInLeagueId)->get()->first();
 
-        //enchères en cours de l'utilisateur et salary cap actuel
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+
+        // ---- ENCHERES EN COURS ET SALARY CAP ACTUEL DE LUTILISATEUR -----------//
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
         if($auctions) {
             $auctions = $auctions->sum("auction");
         } else {
@@ -440,6 +457,19 @@ class DraftController extends Controller
             }
         }
 
+        //prix actuel du joueur selon la dernière enchère faite dans la ligue
+        $lastAuctionOnSelectedPlayer = Auction::whereIn('team_id', $teamsInLeagueId)
+            ->where('bought', '=',0)
+            ->where('player_id', $id)
+            ->orderBy('auction', 'desc')
+            ->first();
+        //s'il n'y a pas déjà d'enchère en cours sur ce joueur, l'enchère est à 0
+        if(!$lastAuctionOnSelectedPlayer) {
+            $lastAuctionOnSelectedPlayer = 0;
+        } else {
+            $lastAuctionOnSelectedPlayer = $lastAuctionOnSelectedPlayer->auction;
+        };
+
 // ------   VERIFIER QUE LE NOMBRE MAX DE JOUEUR A DRAFTER NE SOIT PAS DEPASSER ---------//
         //retourne les joueurs draftés par l'utilisateur
         $drafted = $team->getPlayers;
@@ -466,6 +496,7 @@ class DraftController extends Controller
         //récupération du poste du joueur sur lequel l'utilisateur veut faire une enchère
         $playerPosition = json_decode($player->data);
         $playerPosition = $playerPosition->pl->pos;
+        $playerPosition  = substr($playerPosition, 0,1);
         if($playerPosition === "F") {
             $nbPosition = count($forwards);
             $limit = 5;
@@ -513,7 +544,7 @@ class DraftController extends Controller
         $auctionUpdateDelta = $auctionValue - $PlayerCurrentPrice;
 
         //l'enchere doit être supérieur à la dernière valeur proposée par un joueur de la ligue
-        if(empty($isAlreadyDrafted) && $auctionUpdateDelta <= $moneyAvailable && $nbDraftedPlayers < 15 && $nbPosition < $limit && $auctionValue > $player->price) {
+        if(empty($isAlreadyDrafted) && $auctionUpdateDelta <= $moneyAvailable && $nbDraftedPlayers < 15 && $nbPosition < $limit && $auctionValue > $lastAuctionOnSelectedPlayer) {
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
             Auction::where([['player_id',$id], ['team_id', $team->id]])->update(['auction' => $auctionValue,'auction_time_limit' => $auctionTimeLimit ]);
             return back()->with('succes', 'Enchère Enregistrée !');

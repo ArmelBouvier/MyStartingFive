@@ -18,7 +18,7 @@
             </div><br/>
         @endif
         <div class="row mb-3">
-            <div class="col-md-6"><img class="w-25" src="{{$logo}}"></div>
+            <div class="col-md-6 d-flex justify-content-end"><img class="w-25" src="{{$logo}}"></div>
             <div class="col-md-6"><h1 class="my-5 text-white">{{ $team->name }}</h1></div>
         </div>
 

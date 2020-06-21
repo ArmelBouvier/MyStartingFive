@@ -9,6 +9,12 @@
     {{-- Body --}}
     {!!  $content !!}
 
+    @slot('subcopy')
+        @component('mail::subcopy')
+            {{ 'A bientôt chez MS5  🏀🏀'  }}
+        @endcomponent
+    @endslot
+
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')

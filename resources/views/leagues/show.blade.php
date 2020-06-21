@@ -58,12 +58,10 @@
                     <th class="tertiary">Participant</th>
                     <th class="tertiary">Nom d'équipe</th>
                     <th class="tertiary">% de victoires</th>
-{{--                    <th class="tertiary">valeur de la team</th>--}}
+                    <th class="tertiary">valeur de la team</th>
                 </tr>
                 </thead>
                 <tbody>
-                {{$i = 1}}
-
                 @foreach($league->users as $user)
                     <tr>
                         <td>{{ $user->pseudo }}</td>
@@ -83,7 +81,7 @@
                         <td>
                             @if($league->isActive === 1)
                                 @if($user->team !== null)
-                                    {{$teamVictoryRatio[$user->team->id]}}
+                                    {{$teamVictoryRatio[$user->team->id]}} %
                                 @else
                                     L'équipe doit être créée !
                                 @endif
@@ -91,21 +89,17 @@
                                 En attente du lancement de la league !
                             @endif
                         </td>
-{{--                        <td>--}}
-{{--                            @if($league->isActive === 1)--}}
-{{--                                @if($user->team !== null)--}}
-{{--                                    @if($league)--}}
-{{--                                        {{$teamVictoryRatio[$user->team->id]}}--}}
-{{--                                    @else--}}
-{{--                                        La draft doit être achevée !--}}
-{{--                                    @endif--}}
-{{--                                @else--}}
-{{--                                    L'équipe doit être créée !--}}
-{{--                                @endif--}}
-{{--                            @else--}}
-{{--                                En attente du lancement de la league !--}}
-{{--                            @endif--}}
-{{--                        </td>--}}
+                        <td>
+                            @if($league->isActive === 1)
+                                @if($user->team !== null)
+                                    {{$allLeagueTeamsValues[$user->team->id]}} M$
+                                @else
+                                    L'équipe doit être créée !
+                                @endif
+                            @else
+                                En attente de la fin de la draft !
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
