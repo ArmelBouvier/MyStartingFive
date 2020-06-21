@@ -97,7 +97,7 @@
         <div class="container-fluid py-4">
             <div class="row">
                 <p><a class="text-white" href="mailto:MyStarting5fr@gmail.com">Contact</a></p>
-                <p><a class="text-white ml-3" href="{{'mentions_legales'}}">Mentions Légales</a></p>
+                <p><a class="text-white ml-3" href="{{'/mentions_legales'}}">Mentions Légales</a></p>
 
             </div>
 

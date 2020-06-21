@@ -246,7 +246,7 @@
                                     </div>
                                 @else
                                     <div class="col-md-12">
-                                        <h3 class="text-center">Match pas commencer</h3>
+                                        <h3 class="text-center">Match pas commencé</h3>
                                         <img class="w-100" src="{{asset('storage/images/basketball.jpg')}}" alt="">
                                     </div>
                                 @endif

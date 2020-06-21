@@ -47,8 +47,9 @@ class TeamController extends Controller
                 ->first();
             $userLeagueId = $userGetLeague->id;
             //Vérification du nombre d'équipes associées à l'utilisateur
-            if ($hasTeam = $user->team()->exists()) {
-                return redirect()->route('teams.show', $userLeagueId);
+           ;
+            if (isset($user->team)) {
+                return redirect()->route('teams.show', $user->team->id);
             } else {
                 //récupérer l'équipe favorite du joueur pour lui afficher le logo correspondant
                 $userHasLogo = $user->nbaTeams;

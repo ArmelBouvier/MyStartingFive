@@ -587,6 +587,13 @@ class DraftController extends Controller
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
             Auction::where([['player_id',$id], ['team_id', $team->id]])->update(['auction' => $auctionValue,'auction_time_limit' => $auctionTimeLimit ]);
             return back()->with('succes', 'Enchère Enregistrée !');
+        } elseif($auctionValue <= $lastAuctionOnSelectedPlayer ) {
+            return back()->with('errors','Tu dois enchérir plus !');
+        } elseif($nbDraftedPlayers === 15){
+            return back()->with('errors','Tu as déjà 12 joueurs !');
+
+        }elseif(!empty($isAlreadyDrafted)){
+            return back()->with('errors','Trop tard !');
         }
         return back()->with('errors','Tu n\'as pas assez d\'argent !');
     }

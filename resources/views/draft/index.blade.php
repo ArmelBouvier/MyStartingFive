@@ -423,6 +423,9 @@
                                             @php $indicator = false @endphp
                                         @endif
                                     @endforeach
+
+                                        <p style="font-size: 0.5rem;">Ma dernière enchère: {{$auction->auction}}</p>
+
                                 </div>
                             </div>
                         </div>
