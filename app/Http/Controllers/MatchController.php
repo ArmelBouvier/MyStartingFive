@@ -39,10 +39,13 @@ class MatchController extends Controller
 
         // $userNextMatch récupère le prochain matchs jouer par l'utilisateur dans match
 
-        $userNextMatch  = Match::whereNull('home_team_score')->where([['league_id', $userLeagueId],['away_team_id', $userTeam->id]])
-            ->orwhere([['league_id', $userLeagueId],['home_team_id', $userTeam->id]])
-            ->orderBy('start_at','asc')
-            ->get()
+        $userNextMatch = Match::where(function ($query) use ($userLeagueId, $userTeam) {
+            $query->where(['league_id' => $userLeagueId, 'away_team_id' => $userTeam->id])
+                ->orwhere(['league_id' => $userLeagueId, 'home_team_id' => $userTeam->id]);
+        })
+            ->whereNull('home_team_score')
+            ->whereNotNull('away_team_id')
+            ->orderBy('start_at', 'asc')
             ->first();
 
 

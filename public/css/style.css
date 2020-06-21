@@ -399,6 +399,12 @@ html {
   background-size: cover;
 }
 
+.bg-lastmatch {
+  background: url("/../storage/images/bg-lastmatch.jpg") center no-repeat;
+  width: 100%;
+  background-size: cover;
+}
+
 .bg-team {
   background: #fff;
   border: solid 1px #fff;
