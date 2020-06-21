@@ -99,12 +99,16 @@ class GenerateMatchesCalender extends Command
 //--------------------- RAJOUTE DES JOUEURS ALEATOIRES DANS LES EQUIPES QUI NE SONT PAS COMPLETES A TEMPS --------------------- //
 
 //                    RECUPERATION DE JOUEURS ALEATOIRES PEU CHER
-                $randomPlayers = Player::where('price', '<', 4)->take(50)->get();
+
+               $offset = 0;
+//                POUR CHAQUE EQUIPE AJOUT DU NOMBRE DE JOUEURS NECESSAIRES POUR QUE LE ROSTER SOIT COMPLET
+            foreach ($allTeams as $team) {
+
+                $randomPlayers = Player::where('price','<', 8)->offset($offset)->limit(50)->get();
 
                 $randomCenters = [];
                 $randomGuards = [];
                 $randomForwards = [];
-
 
                 foreach ($randomPlayers as $randomPlayer) {
                     $playersInfos = json_decode($randomPlayer->data);
@@ -118,9 +122,6 @@ class GenerateMatchesCalender extends Command
                         $randomGuards[] = $randomPlayer;
                     }
                 }
-
-//                POUR CHAQUE EQUIPE AJOUT DU NOMBRE DE JOUEURS NECESSAIRES POUR QUE LE ROSTER SOIT COMPLET
-            foreach ($allTeams as $team) {
                 //max des joueurs autorisés dans l'équipe
                 $maxPlayers = 12;
                 if (count($team->getPlayers) < $maxPlayers) {
@@ -180,6 +181,8 @@ class GenerateMatchesCalender extends Command
 
                 }
 
+                //offset pour que les randomplayers ne soient pas les mêmes entre les équipes
+                $offset += 50;
             }
 
 // ---------------- ENVOI D'EMAIL AUX UTILISATEURS PRESENTS DANS LA LIGUE  --------------------------//

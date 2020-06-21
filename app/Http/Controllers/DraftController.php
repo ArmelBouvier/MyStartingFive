@@ -269,18 +269,20 @@ class DraftController extends Controller
 
         //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
         $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+
         $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
 
         if($auctions) {
-            $auctions = $auctions->sum("auction");
+            $auctionsValue = $auctions->sum("auction");
         } else {
-            $auctions = 0;
+            $auctionsValue = 0;
         }
+
 
         //salary cap actuel de l'utilisateur
         $currentSalaryCap = $team->salary_cap;
         //salary_cap - la somme des enchères qu'il a en cours
-        $moneyAvailable = $currentSalaryCap - $auctions;
+        $moneyAvailable = $currentSalaryCap - $auctionsValue;
 
 //        RECUPERATION DES DONNES ENCHERE SUR LE JOUEUR SELECTIONNE PAR UTILISATEUR
         //prix actuel du joueur selon la dernière enchère faite dans la ligue
@@ -320,6 +322,7 @@ class DraftController extends Controller
                 $guards[] = $draftedPlayer;
             }
         }
+
         //récupération du poste du joueur sur lequel l'utilisateur veut faire une enchère
         $playerPosition = json_decode($player->data);
         $playerPosition = $playerPosition->pl->pos;
@@ -334,9 +337,46 @@ class DraftController extends Controller
             $limit = 5;
         }
 
+
+        //VERIFIER QUE LE NOMBRE DenCHERES PLUS LE NOMBRE DE JOUEURS DRAFTES SOIT INFERIEUR
+        //tableau pour stocker le poste des joueurs sur lequel l'utilisateur a enchéri
+        $forwardsPlayerAuctionned = [];
+        $guardsPlayerAuctionned = [];
+        $centersPlayerAuctionned = [];
+
+        if(!$auctions->isEmpty()) {
+            foreach ($auctions as $auction) {
+
+                $playerAuctionned = $auction->getPlayerData;
+                $playerAuctionnedPosition = json_decode($playerAuctionned->data);
+                $playerAuctionnedPosition  = substr($playerAuctionnedPosition->pl->pos, 0,1);
+
+                if($playerAuctionnedPosition === "F") {
+                    $forwardsPlayerAuctionned[] = $auction;
+                } elseif($playerAuctionnedPosition === "C") {
+                    $centersPlayerAuctionned[] = $auction;
+                } else {
+                    $guardsPlayerAuctionned[] = $auction;
+                }
+            }
+
+            if($playerAuctionnedPosition === "F") {
+                $limitAuction = count($forwardsPlayerAuctionned);
+            } elseif($playerAuctionnedPosition === "C") {
+                $limitAuction = count($centersPlayerAuctionned);
+            } else {
+                $limitAuction = count($guardsPlayerAuctionned);
+
+            }
+        } else {
+            $limitAuction = 0;
+        }
+
+
+
         if(empty($isAlreadyDrafted) && $moneyAvailable >= ($player->price + $minimumAuctionValue)
             && $moneyAvailable >= ($lastAuctionOnSelectedPlayer + $minimumAuctionValue)
-            && $nbDraftedPlayers < 12 && $nbPosition < $limit) {
+            && $nbDraftedPlayers < 12 && ($nbPosition + $limitAuction) < $limit) {
 
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
 
@@ -371,9 +411,11 @@ class DraftController extends Controller
                 $message = 'Tu as déjà drafté 12 joueurs !';
             } elseif ($nbPosition < $limit) {
                 $message = 'Tu as atteint ton nombre limite de joueurs pour ce poste !';
+            } elseif (($nbPosition + $limitAuction) < $limit){
+                $message = 'Tu as atteint ton nombre limite d\'enchères sur ce poste !';
             }
 
-            return back()->with('errors','Tu n\'as pas assez d\'argent !');
+            return back()->with('errors', $message);
         }
     }
 
