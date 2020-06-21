@@ -116,9 +116,13 @@
                                         }
                     @endphp
                     <tr>
-                            <td><img
-                                    src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
-                                    class="w-25 rounded-circle pr-1"></td>
+                            <td>
+                                @if($player->photo_url === 'image')
+                                <i class="fas fa-user fa-2x ml-3 mr-4 secondary"></i>
+                                @else
+                                <img src="{{$player->photo_url}}"
+                                     class="w-25 rounded-circle pr-1">
+                                 @endif
                             <td>{{$playerStats->fn}} {{$playerStats->ln}}</td>
                             <td>{{$player->price}}</td>
                             <td>{{$position}}</td>

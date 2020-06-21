@@ -158,11 +158,12 @@
                                             @endphp
                                             <tr>
                                                 <th scope="row" class="align-middle pr-0">
-
-                                                    <img
-                                                        src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
-                                                        class="w-25 rounded-circle pr-1">
-
+                                                    @if($player->photo_url === 'image')
+                                                        <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                                    @else
+                                                        <img src="{{$player->photo_url}}"
+                                                             class="w-25 rounded-circle pr-1">
+                                                    @endif
                                                     {{$playerStats->fn}} {{$playerStats->ln}}
                                                 </th>
                                                 <td class="align-middle">{{$position}}</td>
