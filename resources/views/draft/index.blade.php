@@ -359,7 +359,7 @@
                                         <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
                                     @else
                                         <img src="{{$auction->getPlayerData->photo_url}}"
-                                             class="w-25 rounded-circle pr-1">
+                                             class="w-100 rounded-circle pr-1">
                                     @endif
                                 </div>
                                 <div class="col-md-6">
