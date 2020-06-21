@@ -98,7 +98,7 @@
         <div class="row justify-content-around">
             <div class="col-md-8">
                 <div class="row mx-3">
-                    <div class="col-12 d-flex py-1 flex-start">
+                    <div class="col-8 d-flex py-1 flex-start">
                         <div class="">
                             <a href="/draft" class="btn MS5card" id="btn-allPlayers">Tous les joueurs</a>
                         </div>
@@ -124,6 +124,9 @@
                                 <a href="/draft?position=C" class="bt p-1 dropdown-item text-left">Pivot</a>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-4 d-flex py-1 flex-start h-100">
+                        <a href="/draft" class="btn MS5card">Actualiser les enchères</a>
                     </div>
                 </div>
                 {{-----------------------TABLEAU JOUEURS NBA ---------------------}}
@@ -236,7 +239,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Arrières</th>
-                                    <th>{{count($guards)}}</th>
+                                    <th>{{count($guards)}} /5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -267,7 +270,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Ailiers</th>
-                                    <th>{{count($forwards)}}</th>
+                                    <th>{{count($forwards)}} /5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -298,7 +301,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Pivots</th>
-                                    <th>{{count($centers)}}</th>
+                                    <th>{{count($centers)}} /2</th>
                                 </tr>
                                 </thead>
                                 <tbody>

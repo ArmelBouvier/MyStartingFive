@@ -440,6 +440,19 @@ class DraftController extends Controller
             }
         }
 
+        //prix actuel du joueur selon la dernière enchère faite dans la ligue
+        $lastAuctionOnSelectedPlayer = Auction::whereIn('team_id', $teamsInLeagueId)
+            ->where('bought', '=',0)
+            ->where('player_id', $id)
+            ->orderBy('auction', 'desc')
+            ->first();
+        //s'il n'y a pas déjà d'enchère en cours sur ce joueur, l'enchère est à 0
+        if(!$lastAuctionOnSelectedPlayer) {
+            $lastAuctionOnSelectedPlayer = 0;
+        } else {
+            $lastAuctionOnSelectedPlayer = $lastAuctionOnSelectedPlayer->auction;
+        };
+
 // ------   VERIFIER QUE LE NOMBRE MAX DE JOUEUR A DRAFTER NE SOIT PAS DEPASSER ---------//
         //retourne les joueurs draftés par l'utilisateur
         $drafted = $team->getPlayers;
@@ -466,6 +479,7 @@ class DraftController extends Controller
         //récupération du poste du joueur sur lequel l'utilisateur veut faire une enchère
         $playerPosition = json_decode($player->data);
         $playerPosition = $playerPosition->pl->pos;
+        $playerPosition  = substr($playerPosition, 0,1);
         if($playerPosition === "F") {
             $nbPosition = count($forwards);
             $limit = 5;
@@ -513,7 +527,7 @@ class DraftController extends Controller
         $auctionUpdateDelta = $auctionValue - $PlayerCurrentPrice;
 
         //l'enchere doit être supérieur à la dernière valeur proposée par un joueur de la ligue
-        if(empty($isAlreadyDrafted) && $auctionUpdateDelta <= $moneyAvailable && $nbDraftedPlayers < 15 && $nbPosition < $limit && $auctionValue > $player->price) {
+        if(empty($isAlreadyDrafted) && $auctionUpdateDelta <= $moneyAvailable && $nbDraftedPlayers < 15 && $nbPosition < $limit && $auctionValue > $lastAuctionOnSelectedPlayer) {
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
             Auction::where([['player_id',$id], ['team_id', $team->id]])->update(['auction' => $auctionValue,'auction_time_limit' => $auctionTimeLimit ]);
             return back()->with('succes', 'Enchère Enregistrée !');
