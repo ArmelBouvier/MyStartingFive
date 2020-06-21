@@ -256,6 +256,12 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
     php artisan StoreNbaPlayerPhotoUrl
    
    <ul>
+         <li>Pour calculer le prix de chaque joueurs de la nba </li>
+    </ul>
+    
+    php artisan UpdateNbaPlayersPrices
+    
+   <ul>
       <li>Pour calculer le score de chaque joueurs de la nba </li>
    </ul>
    
