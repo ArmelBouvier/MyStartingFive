@@ -6,7 +6,6 @@
                 <h1 class="text-center">DRAFT</h1>
             </div>
         </div>
-
         <div class="row alert-div">
 
         {{-----------------------VALIDER DRAFT ---------------------}}
@@ -199,10 +198,11 @@
                                     @if(!in_array($player->id, $auctionPlayersId) && !in_array($player->id, $notDisplayedPlayers))
                                         <td colspan="2" class="align-middle">
                                             <form action="{{ route('draft.auction', ['id' => $player->id])}}"
-                                                  method="POST" class="mb-0">
+                                                  method="POST" class="mb-0" onsubmit="return confirmAuction('{{$playerStats->fn}}','{{$playerStats->ln}}')">
+                                                <input hidden value="{{$playerStats->ln}}">
                                                 @csrf
-                                                <button type="submit" class="btn btn-outline-light p-0 px-1">enchérir
-                                                </button>
+                                                <button type="submit" class="btn btn-outline-light p-0 px-1"> enchérir
+                                                </button >
                                             </form>
                                         </td>
                                     @elseif(in_array($player->id, $auctionPlayersId))
@@ -436,10 +436,23 @@
 @endsection
 @section('script-footer')
     <script>
+
         setInterval( function () {
 
             $('.alert-div').empty();
         }, 3000);
+
+        //pour bloquer envoie du formulaire
+        function confirmAuction(firstname, lastname){
+
+            let message = 'Es-tu sûr de vouloir mettre une enchère sur ' +firstname + ' '+lastname + ' ?';
+            let r = confirm(message);
+
+            if(r === false) {
+                return false;
+            }
+        }
+
 
 
         // --------------------- DECOMPTE AVANT Fin de Draft --------------------------------------//

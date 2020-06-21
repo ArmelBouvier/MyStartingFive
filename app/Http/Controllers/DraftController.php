@@ -355,7 +355,7 @@ class DraftController extends Controller
                 $message = 'Tu as déjà  drafté ce joueur !';
             } elseif($moneyAvailable < $player->price) {
                 $message = 'Ce joueur est trop cher pour toi !';
-            }  elseif ($moneyAvailable < $playerLatestAuction) {
+            }  elseif ($moneyAvailable < $lastAuctionOnSelectedPlayer) {
                 $message = 'Tu n\'as plus assez d\'argent !';
             } elseif($nbDraftedPlayers >= 12) {
                 $message = 'Tu as déjà drafté 12 joueurs !';
