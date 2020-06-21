@@ -58,6 +58,10 @@
                 </li>
 
                 <li class="nav-item active">
+                    <a class="nav-link bouton-header" href="{{ route('teams.create')}}">Teams</a>
+                </li>
+
+                <li class="nav-item active">
                     <a class="nav-link bouton-header" href="{{ route('dashboard.index') }}">Tableau de bord</a>
                 </li>
 
