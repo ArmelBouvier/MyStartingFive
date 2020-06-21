@@ -19,7 +19,7 @@
         @endif
 
         <div class="row mb-3 ">
-            <div class="col-md-12 d-flex justify-content-center align-items-center">
+            <div class="col-md-12 d-flex flex-column justify-content-center align-items-center">
                 <img class="w-25" src="{{$logo}}" alt="logo">
                 <h1 class="my-5 text-white">{{ $team->name }}
                 </h1></div>

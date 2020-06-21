@@ -161,10 +161,13 @@
                                                     @if($player->photo_url === 'image')
                                                         <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
                                                     @else
-                                                        <img src="{{$player->photo_url}}"
-                                                             class="w-25 rounded-circle pr-1">
+                                                        <div class="text-center">
+                                                            <img src="{{$player->photo_url}}"
+                                                                 class="w-25 rounded-circle pr-1">
+                                                        </div>
+
                                                     @endif
-                                                    {{$playerStats->fn}} {{$playerStats->ln}}
+                                                    <p class="text-center">{{$playerStats->fn}} {{$playerStats->ln}}</p>
                                                 </th>
                                                 <td class="align-middle">{{$position}}</td>
                                                 <td class="align-middle">{{$player->score}}</td>
@@ -243,7 +246,8 @@
                                     </div>
                                 @else
                                     <div class="col-md-12">
-                                        <h3>Match pas commencer</h3>
+                                        <h3 class="text-center">Match pas commencer</h3>
+                                        <img class="w-100" src="{{asset('storage/images/bg-lastmatch.jpg')}}" alt="">
                                     </div>
                                 @endif
 

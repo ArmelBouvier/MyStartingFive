@@ -134,7 +134,7 @@
                                     @else
                                         <div class="d-flex justify-content-center">
                                             <img src="{{$playerSelected->photo_url}}"
-                                                 class="w-50 rounded-circle pr-1">
+                                                 class="w-75 rounded-circle my-2 pr-1">
                                         </div>
 
                                     @endif
@@ -440,7 +440,7 @@
                                 if (data.photo_url === 'image') {
                                     photo = "<i class='fas fa-user fa-2x ml-3 mr-4 main-color'>" + "</i>";
                                 } else {
-                                    photo = "<img src=" + data.photo_url + " >";
+                                    photo = "<img class='w-75 rounded-circle my-2' src=" + data.photo_url + " >";
                                 }
 
                                 table.insertAdjacentHTML('beforeend',
