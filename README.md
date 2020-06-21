@@ -195,7 +195,9 @@ Chaque dimanche à 20h00, une tâche enregistrée vient définir le résultat de
 Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin, les résultats de la ligue restent accessibles pendant une semaine puis sont supprimés et les utilisateurs qui en faisaient partie peuvent en rejoindre une autre. 
 
 
-##               1.5.        Pour Jouer a MS5 quelque ligne de commande sont nécessaire
+##               1.5.        Pour jouer à MS5 quelque lignes de commandes sont nécessaires
+
+## 1.5.1  Installation du projet 
 
 <ul>
     <li>cloner le repository</li>
@@ -213,3 +215,89 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
   <ul>
      <li></li>
   </ul>       
+
+    npm install && npm run dev
+    
+   <ul>
+        <li>Lancer le seed "RolesTableSeeder.php" pour attribuer les roles dans la bdd</li>
+   </ul>
+   
+      php artisan db:seed
+    
+   ## 1.5.2  Installation des CustomClass 
+   
+   <ul>
+     <li>Pour récupérer tous les joueurs de la NBA en fichier json</li>
+   </ul>
+   
+    php artisan StoreAllNbaPlayers   
+    
+   <ul>
+      <li>Pour calculer et stocker le fichier json des joueurs blessés</li>
+   </ul>
+   
+    php artisan StoreAllNbaPlayersInjuryData 
+   
+   <ul>
+      <li>Pour récupérer tous les teams de la NBA en fichier json</li>
+   </ul>
+   
+    php artisan StoreAllNbaTeams  
+      
+   <ul>
+      <li>Pour récupérer tous les teams de la NBA en fichier json</li>
+   </ul>
+    
+    php artisan StoreNbaPlayerData  
+    
+   <ul>
+     <li>Pour vérifier si le joueurs n’est pas blessé en un fichier json</li>
+   </ul>
+   
+    php artisan StoreNbaPlayerInjuryData
+
+   <ul>
+        <li>Pour récupérer tous les url des photos sur chaque joueurs de la nba en un  fichier json</li>
+   </ul>
+   
+    php artisan StoreNbaPlayerPhotoUrl
+   
+   <ul>
+      <li>Pour calculer le score de chaque joueurs de la nba </li>
+   </ul>
+   
+   php artisan UpdateNbaPlayersScores
+
+   ## 1.5.3  Lancer la fin de la draft
+   
+   <ul>
+      <li>Pour enregistrer les choix de draft</li>
+   </ul>
+   
+    php artisan SaveDraftPick
+   
+   <ul>
+    <li>Pour générer la fin de la draft et attribuer des joueurs en automatique si l'utilisateur n’as pas fini ça draft</li>
+   </ul>
+   
+    php artisan GenerateMatchesCalender
+     
+   ## 1.5.4  Lancer la fin d'un match 
+   
+   <ul>
+     <li>Pour la fin du match calculer le score</li>
+   </ul>
+   
+    php artisan PlayWeeklyMatches  
+   
+
+ ##               1.6.        Fin d'une League
+ 
+ 
+ <ul>
+    <li>Pour supprimer une league</li>
+ </ul>
+ 
+    php aritsan EndOfLeague
+
+   
