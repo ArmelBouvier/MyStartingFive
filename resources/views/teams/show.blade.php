@@ -17,12 +17,15 @@
                 {{ session()->get('success') }}
             </div><br/>
         @endif
-        <div class="row mb-3">
-            <div class="col-md-6 d-flex justify-content-end"><img class="w-25" src="{{$logo}}"></div>
-            <div class="col-md-6"><h1 class="my-5 text-white">{{ $team->name }}</h1></div>
+
+        <div class="row mb-3 ">
+            <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <img class="w-25" src="{{$logo}}" alt="logo">
+                <h1 class="my-5 text-white">{{ $team->name }}
+                </h1></div>
         </div>
 
-        <div class="row justify-content-between">
+        <div class="row justify-content-around">
 
 {{--            Infos sur les joueurs--}}
             <div class="MS5card card mb-5" style="width: 18rem;">
@@ -118,12 +121,12 @@
                     <tr>
                             <td><img
                                     src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
-                                    class="w-25 rounded-circle pr-1"></td>
-                            <td>{{$playerStats->fn}} {{$playerStats->ln}}</td>
-                            <td>{{$player->price}}</td>
-                            <td>{{$position}}</td>
-                            <td>{{$player->playersMatchs->count()}}</td>
-                            <td>{{$player->score}}</td>
+                                    class="w-50 rounded-circle pr-1"></td>
+                            <td class="align-middle">{{$playerStats->fn}} {{$playerStats->ln}}</td>
+                            <td class="align-middle">{{$player->price}}</td>
+                            <td class="align-middle">{{$position}}</td>
+                            <td class="align-middle">{{$player->playersMatchs->count()}}</td>
+                            <td class="align-middle">{{$player->score}}</td>
                     </tr>
                 @endforeach
                 </tbody>

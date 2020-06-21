@@ -3,7 +3,7 @@
     <div class="container mb-5">
         <div class="row mt-5">
             <div class="col-md-6">
-                <img id="img-tuto" src="/../storage/images/image_tutos.jpg" alt="image tuto">
+                <img class="w-100" id="img-tuto" src="/../storage/images/image_tutos.jpg" alt="image tuto">
             </div>
             <div class="col-md-6">
                 <div class="row my-5">
@@ -29,20 +29,20 @@
                     <h2 class="text-dark">Tout se déroule en 4 steps :</h2>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <div class="row justify-content-around">
+                <div class="col-md-3 d-flex justify-content-start align-items-center">
                     <img src="{{asset('storage/images/picto_league.png')}}" alt="panier">
                     <h5>Crée ou rejoins un league</h5>
                 </div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="col-md-3 d-flex justify-content-start align-items-center">
                     <img src="{{asset('storage/images/picto_teams.png')}}" alt="maillot">
                     <h5>Crée ton équipe</h5>
                 </div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="col-md-3 d-flex justify-content-start align-items-center">
                     <img src="{{asset('storage/images/picto_joueur.png')}}" alt="joueur">
                     <h5>Sélectionne tes joueurs pendant la draft</h5>
                 </div>
-                <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <div class="col-md-3 d-flex justify-content-start align-items-center">
                     <img style="height: 75px; width: 75px;" src="{{asset('storage/images/picto_matchs.png')}}"
                          alt="terrain">
                     <h5>Ecrase tes adversaires en match !</h5>
