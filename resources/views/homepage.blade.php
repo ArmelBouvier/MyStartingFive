@@ -29,7 +29,7 @@
 
         <div class="row no-gutters">
             <div class="col-md-12 text-center pt-5">
-                <h2>Crées ta ligue, invites tes potes <b class="quaternary">et marches leur dessus !</b></h2>
+                <h2 class="text-dark">Crée ta ligue, invites tes potes <b class="quaternary">et marche leur dessus !</b></h2>
             </div>
         </div>
 
@@ -116,7 +116,7 @@
             <div class="col-md-6 d-flex justify-content-around">
                 <div class="p-5">
                     <div>
-                        <img class="imageHOF" src="https://placehold.it/100/100" alt="">
+                        <img style="width: 100px;" class="imageHOF" src="{{asset('storage/images/anais.jpg')}}" alt="anais">
                     </div>
                     <div>
                         <h4 class="text-white">Mrs Invisible</h4>
@@ -127,7 +127,7 @@
 
                 <div class="p-5">
                     <div>
-                        <img class="imageHOF" src="https://placehold.it/100/100" alt="">
+                        <img style="width: 100px;" class="imageHOF" src="{{asset('storage/images/florian.jpg')}}" alt="florian">
                     </div>
                     <div>
                         <h4 class="text-white">The Torch</h4>
@@ -140,7 +140,7 @@
             <div class="col-md-6 d-flex justify-content-around">
                 <div class="p-5">
                     <div>
-                        <img class="imageHOF" src="https://placehold.it/100/100" alt="">
+                        <img style="width: 100px;" class="imageHOF" src="{{asset('storage/images/jeremy.jpg')}}" alt="jeremy">
                     </div>
                     <div>
                         <h4 class="text-white">The Thing</h4>
@@ -151,7 +151,7 @@
 
                 <div class="p-5">
                     <div>
-                        <img class="imageHOF" src="https://placehold.it/100/100" alt="">
+                        <img style="width: 100px;" class="imageHOF" src="{{asset('storage/images/armel.jpg')}}" alt="armel">
                     </div>
                     <div>
                         <h4 class="text-white">Mr Fantastic</h4>
