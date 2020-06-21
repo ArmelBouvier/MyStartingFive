@@ -169,7 +169,7 @@ class LeagueController extends Controller
         $userInleague = DB::table('league_user')
             ->where('league_user.user_id', Auth::user()->id)
             ->first();
-//dd($leagueId);
+
         if( $userInleague->league_id){
             if ($userInleague->league_id === $leagueId){
                 // Check du statut de la draft
