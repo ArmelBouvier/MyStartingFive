@@ -239,7 +239,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Arrières</th>
-                                    <th>{{count($guards)}} /5</th>
+                                    <th>{{count($guards)}} / 5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -270,7 +270,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Ailiers</th>
-                                    <th>{{count($forwards)}} /5</th>
+                                    <th>{{count($forwards)}} / 5</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -301,7 +301,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="3">Pivots</th>
-                                    <th>{{count($centers)}} /2</th>
+                                    <th>{{count($centers)}} / 2</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -425,7 +425,9 @@
                                         $nowSec = $now->format('s');
 
                                         $differenceMin = abs($nowMin - $limitTimeMin);
-                                        $differenceSec= abs($nowSec - $limitTimeSec)
+
+                                        $differenceSec= abs($nowSec - $limitTimeSec);
+
                                     @endphp
                                     <p>Fin de l'enchère dans {{ $differenceMin}} min {{$differenceSec}}</p>
                                 </div>
