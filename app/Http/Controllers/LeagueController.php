@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use function Symfony\Component\String\u;
 
 class LeagueController extends Controller
 {
@@ -142,19 +143,17 @@ class LeagueController extends Controller
             $teamsID[]= $leagueTeam->id;
         }
 
-//        // Calcul de la valeur de chaque équipe de la league
-//        $allLeagueTeamsPlayers = [];
-//        $allLeagueTeamsValues = [];
-//        foreach ($allLeagueTeams as $leagueTeam){
-//            $allLeagueTeamsPlayers[] = $allLeagueTeams->getPlayers;
-//            $teamValue = 0;
-//            foreach($allLeagueTeamsPlayers as $player){
-//                $teamValue += $player->price;
-//
-//            }
-//            $allLeagueTeamsValues[] = $teamValue;
-//        }
-//        dd($allLeagueTeamsValues);
+        // Calcul de la valeur de chaque équipe de la league
+        $allLeagueTeamsValues = [];
+        foreach ($allLeagueTeams as $leagueTeam){
+            $leagueTeamPlayers = $leagueTeam->getPlayers;
+            $teamValue = 0;
+            foreach($leagueTeamPlayers as $player){
+                $teamValue += $player->price;
+            }
+            $allLeagueTeamsValues[$leagueTeam->id] = $teamValue;
+        }
+//        ksort($allLeagueTeamsValues);
 
         // Calcul du pourcentage de victoire de chaque équipe de la league
         $teamVictoryRatio = [];
@@ -169,20 +168,22 @@ class LeagueController extends Controller
                 $teamVictoryRatio[$team] = 0;
             }
         }
-
         // Check du statut de la draft
         if($league->isActive === 1){
             $draftStatus = $league->draft->is_over;
             return view('leagues.show')
                 ->with('league', $league)
                 ->with('teamVictoryRatio', $teamVictoryRatio)
-                ->with('draftStatus', $draftStatus);
+                ->with('draftStatus', $draftStatus)
+                ->with('allLeagueTeamsValues', $allLeagueTeamsValues);
         }else{
             $draftStatus = 0;
+            $allLeagueTeamsValues = 'Draft en cours';
             return view('leagues.show')
                 ->with('league', $league)
                 ->with('teamVictoryRatio', $teamVictoryRatio)
-                ->with('draftStatus', $draftStatus);
+                ->with('draftStatus', $draftStatus)
+                ->with('allLeagueTeamsValues', $allLeagueTeamsValues);
         }
 
 
