@@ -353,20 +353,53 @@
                     @endphp
                     <div class="row mx-0 my-1">
                         <div class="col-12 MS5card">
-                            <div class="row">
-                                <div class="col-md-4">
+                            <div class="row bg-card-title text-right">
+                                @php
+                                    $limitTime = new DateTime($auction->auction_time_limit);
+                                    $limitTimeMin = $limitTime->format('i');
+                                    $limitTimeSec= $limitTime->format('s');
+                                    $now = new DateTime();
+                                    $nowMin = $now->format('i');
+                                    $nowSec = $now->format('s');
+
+                                    $differenceMin = abs($nowMin - $limitTimeMin);
+
+                                    $differenceSec= abs($nowSec - $limitTimeSec);
+
+                                @endphp
+                                <p class="p-1 pr-2 text-right w-100">Fin de l'enchère : {{ $differenceMin}} min {{$differenceSec}}</p>
+                            </div>
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="col-md-4 d-flex flex-column">
                                     @if($auction->getPlayerData->photo_url === 'image')
                                         <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
                                     @else
                                         <img src="{{$auction->getPlayerData->photo_url}}"
                                              class="w-100 rounded-circle pr-1">
                                     @endif
+                                        <p class="text-center">{{$position}}</p>
                                 </div>
-                                <div class="col-md-6">
-                                    <p>{{$position}}</p>
-                                    <p>{{strtoupper($playerData->pl->fn)}} {{strtoupper($playerData->pl->ln)}}</p>
+                                <div class="col-md-4">
+                                    <p>{{$playerData->pl->fn}} {{strtoupper($playerData->pl->ln)}}</p>
+
+                                        <form
+                                            action="{{ route('draft.auction.updateValue', ['id' => $auction->player_id])}}"
+                                            method="POST" class="form-group  d-flex justify-content-center">
+                                            @php $indicator = true @endphp
+                                            @foreach($auctionsOnPlayers as $auctionsOnPlayer)
+                                                @if($auctionsOnPlayer->player_id === $auction->player_id && $indicator)
+                                                    <input class="form-control" type="number" name="auctionValue"
+                                                           id="auctionValue" value="{{$auctionsOnPlayer->auction}}" step="5"
+                                                           min="{{$auctionsOnPlayer->auction}}">
+                                                    @php $indicator = false @endphp
+                                                @endif
+                                            @endforeach
+                                            @method('POST')
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary">enchérir</button>
+                                        </form>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     @php $indicator = true @endphp
                                     @foreach($auctionsOnPlayers as $auctionsOnPlayer)
 
@@ -377,59 +410,6 @@
                                             @php $indicator = false @endphp
                                         @endif
                                     @endforeach
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <form
-                                        action="{{ route('draft.delete.auction', ['id' => $auction->player_id])}}"
-                                        method="POST" class="col-12">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary rounded-circle">X
-                                        </button>
-                                    </form>
-                                </div>
-                                <div class="col-md-6">
-                                    <form
-                                        action="{{ route('draft.auction.updateValue', ['id' => $auction->player_id])}}"
-                                        method="POST" class="form-group w-100 d-flex justify-content-center">
-                                        @php $indicator = true @endphp
-                                        @foreach($auctionsOnPlayers as $auctionsOnPlayer)
-                                            @if($auctionsOnPlayer->player_id === $auction->player_id && $indicator)
-                                                <input class="form-control" type="number" name="auctionValue"
-                                                       id="auctionValue" value="{{$auctionsOnPlayer->auction}}" step="5"
-                                                       min="{{$auctionsOnPlayer->auction}}">
-                                                @php $indicator = false @endphp
-                                            @endif
-                                        @endforeach
-                                        @method('POST')
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary">enchérir</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <p>Ma dernière enchère: {{$auction->auction}}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    @php
-                                        $limitTime = new DateTime($auction->auction_time_limit);
-                                        $limitTimeMin = $limitTime->format('i');
-                                        $limitTimeSec= $limitTime->format('s');
-                                        $now = new DateTime();
-                                        $nowMin = $now->format('i');
-                                        $nowSec = $now->format('s');
-
-                                        $differenceMin = abs($nowMin - $limitTimeMin);
-
-                                        $differenceSec= abs($nowSec - $limitTimeSec);
-
-                                    @endphp
-                                    <p>Fin de l'enchère dans {{ $differenceMin}} min {{$differenceSec}}</p>
                                 </div>
                             </div>
                         </div>

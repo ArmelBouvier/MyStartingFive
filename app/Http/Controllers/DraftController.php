@@ -326,6 +326,7 @@ class DraftController extends Controller
         //récupération du poste du joueur sur lequel l'utilisateur veut faire une enchère
         $playerPosition = json_decode($player->data);
         $playerPosition = $playerPosition->pl->pos;
+        $playerPosition  = substr($playerPosition, 0,1);
         if($playerPosition === "F") {
             $nbPosition = count($forwards);
             $limit = 5;
@@ -349,33 +350,29 @@ class DraftController extends Controller
 
                 $playerAuctionned = $auction->getPlayerData;
                 $playerAuctionnedPosition = json_decode($playerAuctionned->data);
-                $playerAuctionnedPosition  = substr($playerAuctionnedPosition->pl->pos, 0,1);
+                $playerAuctionnedPosition = substr($playerAuctionnedPosition->pl->pos, 0, 1);
 
-                if($playerAuctionnedPosition === "F") {
-                    $forwardsPlayerAuctionned[] = $auction;
-                } elseif($playerAuctionnedPosition === "C") {
-                    $centersPlayerAuctionned[] = $auction;
-                } else {
-                    $guardsPlayerAuctionned[] = $auction;
+                if ($playerAuctionnedPosition === "F") {
+                    $forwardsPlayerAuctionned[] = $playerAuctionned;
+                } elseif ($playerAuctionnedPosition === "C") {
+                    $centersPlayerAuctionned[] = $playerAuctionned;
+                } elseif ($playerAuctionnedPosition === "G") {
+                    $guardsPlayerAuctionned[] = $playerAuctionned;
                 }
             }
-
-            if($playerAuctionnedPosition === "F") {
+            if($playerPosition === "F") {
                 $limitAuction = count($forwardsPlayerAuctionned);
             } elseif($playerAuctionnedPosition === "C") {
                 $limitAuction = count($centersPlayerAuctionned);
             } else {
                 $limitAuction = count($guardsPlayerAuctionned);
-
             }
         } else {
             $limitAuction = 0;
         }
 
-
-
-        if(empty($isAlreadyDrafted) && $moneyAvailable >= ($player->price + $minimumAuctionValue)
-            && $moneyAvailable >= ($lastAuctionOnSelectedPlayer + $minimumAuctionValue)
+        if(empty($isAlreadyDrafted) && $moneyAvailable >= $player->price
+            && $moneyAvailable >= $lastAuctionOnSelectedPlayer
             && $nbDraftedPlayers < 12 && ($nbPosition + $limitAuction) < $limit) {
 
             $auctionTimeLimit = Carbon::parse(now())->addSeconds(30)->format('Y-m-d H:i:s');
