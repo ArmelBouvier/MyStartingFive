@@ -69,14 +69,14 @@ class GenerateMatchesCalender extends Command
                 shuffle($scheduleGames);
 
 
-                $i = 0;
+                $i = 2;
                 foreach ($scheduleGames as $scheduleGame) {
 
-                    if ($i === 0) {
+                    if ($i === 2) {
 
-                        $matchTime = now()->addMinutes(5);
+                        $matchTime = now()->addMinutes(2);
                     } else {
-                        $matchTime = now()->addMinutes(5 + $i);
+                        $matchTime = now()->addMinutes(2 + $i);
 
                     }
 
