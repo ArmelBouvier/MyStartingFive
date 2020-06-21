@@ -1,14 +1,7 @@
-<p align="center"><img src="../storage/app/public/images/logo_footer.png" width="400"></p>
-
 # My Starting Five , Une fantasy league NBA
 
 
-
-
-
-
 ###                1.1.        Présentation du projet
-
 
 
 L'application MS5 est un simulateur de championnat de basket s'appuyant sur les statistiques en temps réel de la NBA.
@@ -298,6 +291,6 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
     <li>Pour supprimer une league</li>
  </ul>
  
-    php aritsan EndOfLeague
+    php artisan EndOfLeague
 
    
