@@ -3,6 +3,16 @@
 @section('content')
     {{--Titre de la page--}}
     <div class="container">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <br/>
+        @endif
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
                 <h1 class="text-white">Tableau de bord</h1>
