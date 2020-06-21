@@ -106,14 +106,18 @@ class DraftController extends Controller
                 ->Paginate(20);
 
         }
-        if (request()->has('position&order')) {
-
-        }
 
 //----------- retourne toutes données relatives enchères en cours de l'utilisateur -------------------- //
 
-        //retourne toutes les enchères en cours de l'utilisateur
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+
+        //retourne toutes les enchères en cours de l'utilisateur pour les joueurs non draftés
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
 
         // stocker les id des joueurs sur lesquels l'utilisateur a mis une enchère pour ne plus afficher le bouton enchérir dans la view
         $auctionPlayersId = [];
@@ -258,8 +262,14 @@ class DraftController extends Controller
         //si le joueur (id) a déjà été drafté par une autre équipe de la ligue l'ajout n'est pas possible
         $isAlreadyDrafted = $player->teams()->whereIn('team_id', $teamsInLeagueId)->get()->first();
 
-        //enchères en cours de l'utilisateur et salary cap actuel
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+        // ---- ENCHERES EN COURS ET SALARY CAP ACTUEL DE LUTILISATEUR -----------//
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
 
         if($auctions) {
             $auctions = $auctions->sum("auction");
@@ -410,8 +420,15 @@ class DraftController extends Controller
         //si le joueur (id) a déjà été drafté par une autre équipe de la ligue l'ajout n'est pas possible
         $isAlreadyDrafted = $player->teams()->whereIn('team_id', $teamsInLeagueId)->get()->first();
 
-        //enchères en cours de l'utilisateur et salary cap actuel
-        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->get();
+
+        // ---- ENCHERES EN COURS ET SALARY CAP ACTUEL DE LUTILISATEUR -----------//
+
+        //récuperer tous les ids des équipes de la ligue
+        $IdsTeamsInLeague = Team::where('league_id', $userLeagueId)->pluck('id')->toArray();
+
+        //récuperer les ids de tous les joueurs draftés par des utilisateurs de la ligue
+        $allPlayersDraftedInLeague = DB::table('player_team')->whereIn('team_id',$IdsTeamsInLeague)->pluck('player_id')->toArray();
+        $auctions = Auction::where([['team_id', $user->team->id],['bought', 0]])->whereNotIn('player_id',$allPlayersDraftedInLeague)->get();
         if($auctions) {
             $auctions = $auctions->sum("auction");
         } else {
