@@ -75,7 +75,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="row no-gutters justify-content-center mt-4">
+                    <div class="row no-gutters justify-content-center m-2">
                         <a href="{{route('match.index')}}" class="text-white bouton-inscription">Coaching</a>
                     </div>
                 </div>
@@ -147,13 +147,14 @@
                                                 }
                                             @endphp
                                             <tr>
-                                                <th scope="row" class="align-middle pr-0">
+                                                <th scope="row" class="d-flex justify-content-around align-middle pr-0">
 
                                                     <img
                                                         src="https://nba-players.herokuapp.com/players/{{$playerStats->ln}}/{{$playerStats->fn}}"
                                                         class="w-25 rounded-circle pr-1">
 
-                                                    {{$playerStats->fn}} {{$playerStats->ln}}
+                                                    <span
+                                                        class="d-flex align-items-center">{{$playerStats->fn}} {{$playerStats->ln}}</span>
                                                 </th>
                                                 <td class="align-middle">{{$position}}</td>
                                                 <td class="align-middle">{{$player->score}}</td>
@@ -161,8 +162,9 @@
                                         @endforeach
                                         </tbody>
                                     </table>
-                                    <div class="row no-gutters justify-content-center mt-4">
-                                        <a href="{{route('teams.show', $userTeamId)}}" class="text-white bouton-inscription">
+                                    <div class="row no-gutters justify-content-center m-2">
+                                        <a href="{{route('teams.show', $userTeamId)}}"
+                                           class="text-white bouton-inscription">
                                             Roster
                                         </a>
                                     </div>
@@ -178,8 +180,8 @@
 
             <div class="row no-gutters justify-content-around mb-4">
                 {{-- Card Dernier Match --}}
-                <div class="col-md-5 MS5card mt-4 p-0">
 
+                <div class="col-md-5 MS5card mt-4 p-0">
                     <div class="row no-gutters">
                         <div class="col-12 text-center my-2">
                             <h2 class="text-white">Dernier Match</h2>
@@ -222,7 +224,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-md-12 d-flex justify-content-center">
+                                    <div class="col-md-12">
                                         <h3>Match pas commencer</h3>
                                     </div>
                                 @endif
@@ -231,15 +233,16 @@
                         </div>
                     </div>
                 </div>
+
                 {{-- Card Tweets si il y des matchs --}}
-                <div class="col-md-5 mt-4 MS5card">
+                <div class="col-md-5 mt-4">
                     @if($userTwitterFeed !== null)
-                        <a class="twitter-timeline" data-width="460" data-height="550" data-theme="dark"
+                        <a class="twitter-timeline MS5card" data-width="460" data-height="550" data-theme="dark"
                            href="{{$userTwitterFeed->twitter_feed}}">
                             Tweets</a>
                         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                     @else
-                        <a class="twitter-timeline" data-width="500" data-height="600" data-theme="dark"
+                        <a class="twitter-timeline MS5card" data-width="500" data-height="550" data-theme="dark"
                            href="https://twitter.com/NBAFRANCE?ref_src=twsrc%5Etfw">Tweets
                         </a>
                         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -252,7 +255,7 @@
             @elseif (!isset($draftIsOver) || $draftIsOver===0)
 
                 <div class="container">
-                    <div class="row no-gutters justify-content-center my-3">
+                    <div class="row no-gutters justify-content-around my-3">
                         {{-- Card Evolutif--}}
                         <div class="col-md-5 MS5card ">
                             @if(isset($league))
@@ -295,25 +298,25 @@
                                     </div>
                                 @endif
                             @else
-                                <div class="row flex-column text-center bg-countdown no-gutters pb-5">
+                                <div class="text-center bg-countdown no-gutters pt-2 pb-5">
                                     <h2 class="text-white py-5">Rejoindre une league</h2>
                                 </div>
                                 <div class="row no-gutters justify-content-center mt-5">
-                                    <a href="{{route('leagues.index')}}" class="text-white bouton-inscription">Rejoindre
+                                    <a href="{{route('leagues.index')}}" class="text-white bouton-inscription my-2">Rejoindre
                                         une league</a>
                                 </div>
                             @endif
 
                         </div>
                         {{-- Card SI il n'y pas de matchs Tweets --}}
-                        <div class="col-md-5 ml-4 MS5card">
+                        <div class="col-md-5 mt-2">
                             @if($userTwitterFeed !== null)
-                                <a class="twitter-timeline" data-width="600" data-height="600" data-theme="dark"
+                                <a class="twitter-timeline MS5card" data-width="600" data-height="550" data-theme="dark"
                                    href="{{$userTwitterFeed->twitter_feed}}">
                                     Tweets</a>
                                 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                             @else
-                                <a class="twitter-timeline" data-width="500" data-height="600" data-theme="dark"
+                                <a class="twitter-timeline MS5card" data-width="500" data-height="550" data-theme="dark"
                                    href="https://twitter.com/NBAFRANCE?ref_src=twsrc%5Etfw">Tweets
                                 </a>
                                 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -353,6 +356,7 @@
                         }
                         this.update(value);
                     }
+
                     // Calculation adapted from https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/
                     function getTimeRemaining(endtime) {
                         var t = Date.parse(endtime) - Date.parse(new Date());
@@ -364,6 +368,7 @@
                             'Secondes': Math.floor((t / 1000) % 60)
                         };
                     }
+
                     function Clock(countdown, callback) {
                         countdown = countdown ? new Date(Date.parse(countdown)) : false;
                         callback = callback || function () {
@@ -382,6 +387,7 @@
                             this.el.appendChild(trackers[key].el);
                         }
                         var i = 0;
+
                         function updateClock() {
                             timeinterval = requestAnimationFrame(updateClock);
                             // throttle so it's not constantly updating the time.
@@ -401,8 +407,10 @@
                                 trackers[key].update(t[key]);
                             }
                         }
+
                         setTimeout(updateClock, 500);
                     }
+
                     var matchDate = document.querySelector('#MatchDateTime').textContent;
                     var deadline = new Date(matchDate);
                     var c = new Clock(deadline, function () {

@@ -28,6 +28,10 @@ footer {
   padding-bottom: 7.6rem;
 }
 
+.pb-league-public {
+  padding-bottom: 11.6rem;
+}
+
 .banner {
   background: url(/../storage/images/Fond_header.jpg) no-repeat;
   background-size: cover;

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container">
+    <div class="container pb-league-public">
             <h1 class="my-5 text-white">Bienvenue sur le portail des Leagues publiques</h1>
             <h2 class="mb-5 text-white">Ici, pas de fairplay, que de l'humour !</h2>
             <div class="row">

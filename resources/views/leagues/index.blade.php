@@ -62,7 +62,7 @@
 
                 {{--                    Rejoindre une league privée--}}
 
-                <div class="MS5card card mb-5" style="width: 18rem;">
+                <div class="MS5card card mb-5 mt-2" style="width: 18rem;">
                     <div id="card_private_league" class="py-4 d-flex flex-column align-items-center">
                         <img src="{{asset('storage/images/leagues_portal/picto_league_privee_min.png')}}" alt="photo">
                         <h2>League privée</h2>

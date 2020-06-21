@@ -28,11 +28,11 @@
         <div class="container">
             <span class="w-50">
                 <a href="{{ url('/') }}">
-                    <img class="logo-header" src="{{asset('storage/images/logo_footer.png')}}" alt="logo">
+                    <img class="logo-header" src="{{asset('storage/images/Logo.png')}}" alt="logo">
                 </a>
             </span>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler text-white" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-expanded="false" aria-controls="navbarSupportedContent"
                     aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
@@ -52,7 +52,7 @@
                             <a class="nav-link bouton-connexion" href="{{ route('login') }}">{{ __('Connexion') }}</a>
                         </li>
                         @if (Route::has('register'))
-                            <li class="nav-item active">
+                            <li class="nav-item active ml-2">
                                 <a class="nav-link bouton-inscription" href="{{ route('register') }}">{{ __('Inscription') }}</a>
                             </li>
                         @endif

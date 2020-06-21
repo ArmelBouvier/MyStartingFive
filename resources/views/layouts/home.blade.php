@@ -34,9 +34,9 @@
                     <div class="container">
                         {{--Réseaux Sociaux--}}
                         <div class="row no-gutters justify-content-end py-5">
-                            <a class="text-dark" href="https://www.instagram.com/nbafra/"><i class="fab fa-instagram fa-2x icon text-center pt-1 m-2"></i></a>
-                            <a class="text-dark" href="https://www.facebook.com/NBAFrance"><i class="fab fa-facebook fa-2x icon text-center pt-1 m-2"></i></a>
-                            <a class="text-dark" href="https://twitter.com/starting5fr"><i class="fab fa-twitter fa-2x icon text-center pt-1 m-2"></i></a>
+                            <a class="text-dark" target="_blank" href="https://www.instagram.com/nbafra/"><i class="fab fa-instagram fa-2x icon text-center pt-1 m-2"></i></a>
+                            <a class="text-dark" target="_blank" href="https://www.facebook.com/NBAFrance"><i class="fab fa-facebook fa-2x icon text-center pt-1 m-2"></i></a>
+                            <a class="text-dark" target="_blank" href="https://twitter.com/starting5fr"><i class="fab fa-twitter fa-2x icon text-center pt-1 m-2"></i></a>
                         </div>
                         {{--Logo Header--}}
                         <div class="row no-gutters justify-content-center py-4">
@@ -46,12 +46,12 @@
                         </div>
                         {{--Bouton--}}
                         <div class="row no-gutters justify-content-center py-5">
-                            <li class="nav-item">
+                            <li class="nav-item" >
                                 <a class="bouton-connexion"
                                    href="{{ route('login') }}">{{ __('Connexion') }}</a>
                             </li>
                             @if (Route::has('register'))
-                                <li class="nav-item">
+                                <li class="nav-item ml-2"style="list-style: none;">
                                     <a class="bouton-inscription"
                                        href="{{ route('register') }}">{{ __('Inscription') }}</a>
                                 </li>

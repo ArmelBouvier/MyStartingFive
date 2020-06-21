@@ -14,20 +14,19 @@
                 <div class="bg-card-title text-center py-1 mb-3">
                     <h2>Mon roster</h2>
                 </div>
-                <table class="table table-striped table-dark table-sm text-white w-100"
-                       style="">
-                    <thead class="">
+                <table id="" class="table table-striped table-dark table-sm text-white">
+                    <thead>
                     <tr>
                         <th scope="col" width="35%">Joueur</th>
                         <th scope="col">Poste</th>
-                        <th scope="col">Min</th>
+                        <th id="stat-none" scope="col">Min</th>
                         <th id="stat-none" scope="col">Pts</th>
                         <th id="stat-none" scope="col">Pass</th>
                         <th id="stat-none" scope="col">Reb</th>
                         <th id="stat-none" scope="col">Blk</th>
                         <th id="stat-none" scope="col">Int</th>
                         <th id="stat-none" scope="col">PdB</th>
-                        <th scope="col">Dernier Score</th>
+                        <th id="stat-none" scope="col">Dernier Score</th>
                         <th scope="col">Blessé</th>
                         <th scope="col">choisir</th>
                     </tr>
@@ -66,14 +65,14 @@
                                 {{$playerStats->fn}} {{$playerStats->ln}}
                             </th>
                             <td class="align-middle">{{$position}}</td>
-                            <td class="align-middle">{{$currentSeasonStats->min}}</td>
+                            <td id="stat-none" class="align-middle">{{$currentSeasonStats->min}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->pts}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->ast}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->reb}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->stl}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->blk}}</td>
                             <td id="stat-none" class="align-middle">{{$currentSeasonStats->tov}}</td>
-                            <td class="align-middle">{{$player->score}}</td>
+                            <td id="stat-none" class="align-middle">{{$player->score}}</td>
                             <td class="align-middle">{{($player->injured === 0)? 'Non' : 'Oui' }}</td>
                             <td colspan="2" class="align-middle">
                                 <form class="mb-0" data-player-id="{{$player->id}}">
@@ -127,24 +126,30 @@
                                        type="submit" class="btn btn-primary rounded-circle delete-btn">X
                                     </a>
                                 <td>
-                                <td width="50%">
+                                <td>
                                     @if($playerSelected->photo_url === 'image')
-                                        <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                        <div class="d-flex justify-content-center">
+                                            <i class="fas fa-user fa-2x ml-3 mr-4 main-color"></i>
+                                        </div>
                                     @else
-                                        <img src="{{$playerSelected->photo_url}}"
-                                             class="w-25 rounded-circle pr-1">
+                                        <div class="d-flex justify-content-center">
+                                            <img src="{{$playerSelected->photo_url}}"
+                                                 class="w-50 rounded-circle pr-1">
+                                        </div>
+
                                     @endif
 
                                 </td>
                                 <td>{{$position}}</td>
-                                <td class="ml-3">{{$playerDatas->fn}}</td>
-                                <td class="ml-3">{{$playerDatas->ln}}</td>
+                                <td class="ml-5">{{$playerDatas->fn}}</td>
+                                <td class="ml-5">{{$playerDatas->ln}}</td>
                             </tr>
                         </tbody>
                         @endforeach
                     </table>
 
                     <a href="" id="modify-compo" class="btn btn-secondary d-none">Modifier La composition</a>
+
                 </div>
 
             </div>
@@ -164,7 +169,8 @@
                             var el = document.createElement('span');
                             el.className = 'flip-clock__piece';
                             el.innerHTML = '<b class="flip-clock__card cardcountdown"><b class="card__top"></b><b class="card__bottom"></b>' +
-                                '<b class="card__back"><b class="card__bottom"></b></b></b>' + '<span class="flip-clock__slot">' + label + '</span>';
+                                '<b class="card__back"><b class="card__bottom"></b></b></b>'
+                                + '<span class="flip-clock__slot">' + label + '</span>';
                             this.el = el;
                             var top = el.querySelector('.card__top'),
                                 bottom = el.querySelector('.card__bottom'),
@@ -431,7 +437,7 @@
                                 }
                                 console.log(data.photo_url);
                                 let photo = '';
-                                if(data.photo_url === 'image'){
+                                if (data.photo_url === 'image') {
                                     photo = "<i class='fas fa-user fa-2x ml-3 mr-4 main-color'>" + "</i>";
                                 } else {
                                     photo = "<img src=" + data.photo_url + " >";
