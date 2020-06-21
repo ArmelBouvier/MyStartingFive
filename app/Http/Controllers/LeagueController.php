@@ -104,15 +104,15 @@ class LeagueController extends Controller
 
             // Envoi d'un mail de confirmation
             $title = 'Confirmation de création league !';
-            $content = 'Salut, ta league ' . $newLeague['name'] .
-                ' a bien été créée et comporte ' . $newLeague['number_teams'] . ' équipes.<br>';
+            $content = 'Salut, ta league ' . '<b>' . $newLeague['name'] . '</b>' .
+                ' a bien été créée et comporte ' . '<b>' . $newLeague['number_teams'] . '</b>' . ' équipes.<br>';
 
             if ($publicLeague === 0) {
                 $content .= "Il s'agit d'une league publique, que tout le monde peut rejoindre";
             } else {
                 $content .= "Pour inviter tes potes, donne leur le mot de passe :<br><br> $token";
             }
-            $content .= "<br><br>Bonne route vers la gloire !";
+            $content .= "<br><br>Bonne route vers la gloire ! ⛹🏻⛹🏽‍ 🏆";
 
             Mail::to($email)->send(new Register($title, $content));
 
@@ -237,8 +237,9 @@ class LeagueController extends Controller
 
                 // Envoi d'un mail de lancement de la draft
                 $title = 'Lancement de la draft !';
-                $content = 'Salut, ta league ' . $data->name .
-                    ' viens d\'entamer sa draft ! Connecte toi vite pour y participer';
+                $content =  'Salut,' . '<br><br>' .
+                            'Ta league ' . '<b>' . $data->name . '</b>' .
+                            ' viens d\'entamer sa draft !' .  '<br><br>' . 'Connecte toi vite pour y participer';
 
 
 
