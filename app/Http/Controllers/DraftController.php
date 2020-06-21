@@ -48,7 +48,7 @@ class DraftController extends Controller
         $team = Team::where('user_id', $user->id)->first();
 
         // tous les joueurs
-        $players = Player::where('price', '>', 1)->orderBy('price', 'desc')->Paginate(20);
+        $players = Player::orderBy('price', 'desc')->Paginate(20);
 
         // id de tous les joueurs draftés
         $draftedPlayers = Player::all();
