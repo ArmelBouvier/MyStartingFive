@@ -137,7 +137,7 @@ class DashboardController extends Controller
                         })
                             ->whereNull('home_team_score')
                             ->whereNotNull('away_team_id')
-                            ->orderBy('start_at', 'desc')
+                            ->orderBy('start_at', 'asc')
                             ->first();
 
                         if ($userNextMatchs != null) {
