@@ -213,7 +213,7 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
     composer install
     
   <ul>
-     <li></li>
+     <li>Installation des packedges et compilation du css et js</li>
   </ul>       
 
     npm install && npm run dev
@@ -245,7 +245,7 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
     php artisan StoreAllNbaTeams  
       
    <ul>
-      <li>Pour récupérer tous les teams de la NBA en fichier json</li>
+      <li>Pour récupérer tous les données de chaque joueurs de la NBA en fichier json (500 requete)</li>
    </ul>
     
     php artisan StoreNbaPlayerData  
@@ -266,7 +266,7 @@ Lorsqu’il n’y a plus aucun match à venir dans une ligue, celle-ci prend fin
       <li>Pour calculer le score de chaque joueurs de la nba </li>
    </ul>
    
-   php artisan UpdateNbaPlayersScores
+    php artisan UpdateNbaPlayersScores
 
    ## 1.5.3  Lancer la fin de la draft
    
